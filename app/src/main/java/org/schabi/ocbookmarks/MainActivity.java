@@ -1,5 +1,6 @@
 package org.schabi.ocbookmarks;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -87,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_change_login) {
+            Intent intent = new Intent(this, LoginAcitivty.class);
+            startActivity(intent);
             return true;
         }
 
