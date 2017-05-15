@@ -4,4 +4,9 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="tags">Tags</string>
     <string name="bookmarks">Bookmarks</string>
+    <string name="loginUserHint">Username</string>
+    <string name="loginPasswordHint">Password</string>
+    <string name="loginUrlHint">Server address https://&#8230;</string>
+    <string name="oc_bookmark_login">OwnCloud Bookmark Login</string>
+    <string name="connect">Connect</string>
 </resources>

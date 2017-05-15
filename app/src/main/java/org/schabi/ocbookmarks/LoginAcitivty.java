@@ -9,5 +9,8 @@ public class LoginAcitivty extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_acitivty);
+
+        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setTitle(getString(R.string.oc_bookmark_login));
     }
 }
