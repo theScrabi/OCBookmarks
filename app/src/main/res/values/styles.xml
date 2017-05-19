@@ -22,6 +22,11 @@
         <item name="colorAccent">@color/loginTextHintColor</item>
     </style>
 
+    <style name="EditBookmarkStyle" parent="AppTheme">
+        <item name="android:textColor">@color/editTitlebarTextColor</item>
+        <item name="colorPrimary">#ffffff</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

@@ -8,4 +8,7 @@
     <color name="loginBackground">#1e2e45</color>
     <color name="loginTextColor">#ffffff</color>
     <color name="loginTextHintColor">#999999</color>
+
+    <!-- edit text dialog -->
+    <color name="editTitlebarTextColor">#ffffff</color>
 </resources>
