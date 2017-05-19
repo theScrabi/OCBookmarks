@@ -15,10 +15,11 @@
 
     <style name="LoginStyle" parent="AppTheme">
         <item name="android:windowBackground">@color/loginBackground</item>
-        <item name="android:textColor">@color/loginTextColor</item>
+        <item name="android:editTextColor">@color/loginTextColor</item>
         <item name="android:textColorHint">@color/loginTextHintColor</item>
         <item name="android:colorControlNormal">@color/loginTextColor</item>
         <item name="android:colorControlActivated">@color/loginTextColor</item>
+        <item name="colorAccent">@color/loginTextHintColor</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
