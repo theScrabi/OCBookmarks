@@ -9,5 +9,5 @@
     <string name="loginUrlHint">Server address https://&#8230;</string>
     <string name="oc_bookmark_login">OwnCloud Bookmark Login</string>
     <string name="connect">Connect</string>
-    <string name="okay">Okay</string>
+    <string name="save">Save</string>
 </resources>
