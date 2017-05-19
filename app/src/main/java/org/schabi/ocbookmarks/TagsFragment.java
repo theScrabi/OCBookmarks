@@ -57,17 +57,26 @@ public class TagsFragment extends Fragment {
             return arrayList.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public class ViewHolder extends RecyclerView.ViewHolder
+                implements View.OnClickListener, View.OnLongClickListener{
             public TextView textView;
 
             public ViewHolder(View view) {
                 super(view);
+                view.setOnClickListener(this);
+                view.setOnClickListener(this);
                 textView = (TextView) view.findViewById(R.id.tag_text);
             }
 
             @Override
             public void onClick(View view) {
                 //handle operations
+            }
+
+            @Override
+            public boolean onLongClick(View view) {
+
+                return true;
             }
         }
     }

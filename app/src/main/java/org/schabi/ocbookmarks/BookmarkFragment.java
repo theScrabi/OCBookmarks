@@ -3,13 +3,17 @@ package org.schabi.ocbookmarks;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -58,15 +62,24 @@ public class BookmarkFragment extends Fragment {
             return arrayList.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public class ViewHolder extends RecyclerView.ViewHolder
+                implements View.OnClickListener, View.OnLongClickListener {
 
             public ViewHolder(View view) {
                 super(view);
+                view.setOnClickListener(this);
+                view.setOnLongClickListener(this);
             }
 
             @Override
             public void onClick(View view) {
-                //handle operations
+
+            }
+
+            @Override
+            public boolean onLongClick(View view) {
+                // Handle long click
+                return true;
             }
         }
     }
