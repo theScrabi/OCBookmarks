@@ -10,4 +10,7 @@
     <string name="oc_bookmark_login">OwnCloud Bookmark Login</string>
     <string name="connect">Connect</string>
     <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="share">Share</string>
 </resources>

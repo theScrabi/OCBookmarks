@@ -3,18 +3,17 @@ package org.schabi.ocbookmarks;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -65,10 +64,31 @@ public class BookmarkFragment extends Fragment {
         public class ViewHolder extends RecyclerView.ViewHolder
                 implements View.OnClickListener, View.OnLongClickListener {
 
+
+            final PopupMenu popup;
+
             public ViewHolder(View view) {
                 super(view);
                 view.setOnClickListener(this);
                 view.setOnLongClickListener(this);
+
+                popup = new PopupMenu(getActivity(), view);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.edit_bookmark_item_menu, popup.getMenu());
+
+
+                // try setting force show icons via reflections (android is a peace of shit)
+                Object menuHelper;
+                Class[] argTypes;
+                try {
+                    Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
+                    fMenuHelper.setAccessible(true);
+                    menuHelper = fMenuHelper.get(popup);
+                    argTypes = new Class[]{boolean.class};
+                    menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -78,7 +98,7 @@ public class BookmarkFragment extends Fragment {
 
             @Override
             public boolean onLongClick(View view) {
-                // Handle long click
+                popup.show();
                 return true;
             }
         }

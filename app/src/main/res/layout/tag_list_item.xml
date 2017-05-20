@@ -15,6 +15,7 @@
         card_view:cardElevation="4dp"
         card_view:cardUseCompatPadding="true"
         android:clickable="true"
+        android:longClickable="true"
         android:foreground="?attr/selectableItemBackground">
 
         <RelativeLayout

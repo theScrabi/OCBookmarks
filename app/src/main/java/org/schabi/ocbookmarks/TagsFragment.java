@@ -3,13 +3,18 @@ package org.schabi.ocbookmarks;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -59,13 +64,35 @@ public class TagsFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder
                 implements View.OnClickListener, View.OnLongClickListener{
-            public TextView textView;
+            public final TextView textView;
+            public final PopupMenu popup;
+            public final CardView cardView;
 
             public ViewHolder(View view) {
                 super(view);
-                view.setOnClickListener(this);
-                view.setOnClickListener(this);
+
                 textView = (TextView) view.findViewById(R.id.tag_text);
+                cardView = (CardView) view.findViewById(R.id.card_view);
+
+                cardView.setOnClickListener(this);
+                cardView.setOnLongClickListener(this);
+
+                popup = new PopupMenu(getActivity(), view);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.edit_tag_item_menu, popup.getMenu());
+
+                // try setting force show icons via reflections (android is a peace of shit)
+                Object menuHelper;
+                Class[] argTypes;
+                try {
+                    Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
+                    fMenuHelper.setAccessible(true);
+                    menuHelper = fMenuHelper.get(popup);
+                    argTypes = new Class[]{boolean.class};
+                    menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -75,7 +102,8 @@ public class TagsFragment extends Fragment {
 
             @Override
             public boolean onLongClick(View view) {
-
+                Log.d("asdfasdf", "aksdfjaskfdj");
+                popup.show();
                 return true;
             }
         }
