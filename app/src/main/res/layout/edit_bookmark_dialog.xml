@@ -31,9 +31,10 @@
 
             <EditText
                 android:id="@+id/urlInput"
+                android:inputType="textUri"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="URL" />
+                android:hint="@string/bookmark_url_hint" />
         </android.support.design.widget.TextInputLayout>
 
 
@@ -46,7 +47,7 @@
                 android:id="@+id/titleInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Title" />
+                android:hint="@string/bookmark_title_hint" />
         </android.support.design.widget.TextInputLayout>
 
 
@@ -60,7 +61,7 @@
                 android:id="@+id/descriptionInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Description" />
+                android:hint="@string/bookmark_description_hint" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 

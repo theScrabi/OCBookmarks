@@ -83,14 +83,34 @@
             </android.support.design.widget.TextInputLayout>
 
 
+            <TextView
+                android:id="@+id/loginErrorView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/passwordInputLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="14dp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="15dp"
+                android:text="Some Error Text" />
+
             <Button
                 android:id="@+id/connectButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/passwordInputLayout"
+                android:layout_below="@id/loginErrorView"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="18dp"
                 android:text="@string/connect" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/loginErrorView"
+                android:layout_marginTop="18dp"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
     </ScrollView>
