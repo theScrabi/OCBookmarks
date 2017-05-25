@@ -3,6 +3,7 @@ package org.schabi.ocbookmarks;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -22,6 +23,17 @@ import java.util.ArrayList;
  */
 
 public class TagsFragment extends Fragment {
+
+
+    public interface OnTagTapedListener {
+        void onTagTaped(String tag);
+    }
+
+    private OnTagTapedListener onTagTapedListener = null;
+    public void setOnTagTapedListener(OnTagTapedListener listener) {
+        onTagTapedListener = listener;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,7 +66,7 @@ public class TagsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.textView.setText(arrayList.get(position));
+            holder.setTagName(arrayList.get(position));
         }
 
         @Override
@@ -62,11 +74,12 @@ public class TagsFragment extends Fragment {
             return arrayList.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder
+        class ViewHolder extends RecyclerView.ViewHolder
                 implements View.OnClickListener, View.OnLongClickListener{
-            public final TextView textView;
-            public final PopupMenu popup;
-            public final CardView cardView;
+            private final TextView textView;
+            private final PopupMenu popup;
+            private final CardView cardView;
+            private String tagName;
 
             public ViewHolder(View view) {
                 super(view);
@@ -95,9 +108,16 @@ public class TagsFragment extends Fragment {
                 }
             }
 
+            public void setTagName(String tag) {
+                tagName = tag;
+                textView.setText(tagName);
+            }
+
             @Override
             public void onClick(View view) {
-                //handle operations
+                if(onTagTapedListener != null) {
+                    onTagTapedListener.onTagTaped(tagName);
+                }
             }
 
             @Override

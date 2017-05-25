@@ -3,6 +3,7 @@ package org.schabi.ocbookmarks;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,16 +22,28 @@ import java.util.ArrayList;
  */
 
 public class BookmarkFragment extends Fragment {
+
+    BookmarksRecyclerViewAdapter mAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fagment_bookmarks, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.bookmark_recycler_view);
-        recyclerView.setAdapter(new BookmarksRecyclerViewAdapter(getActivity()));
+        mAdapter = new BookmarksRecyclerViewAdapter(getActivity());
+        recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return rootView;
+    }
+
+    public void showByTag(String tag) {
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void releaseTag() {
+        mAdapter.notifyDataSetChanged();
     }
 
     class BookmarksRecyclerViewAdapter extends RecyclerView.Adapter<BookmarksRecyclerViewAdapter.ViewHolder> {

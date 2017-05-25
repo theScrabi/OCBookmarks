@@ -35,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    private Toolbar mToolbar;
+    private BookmarkFragment mBookmakrFragment;
+    private TagsFragment mTagsFragment;
+
     private static final String TAG = MainActivity.class.toString();
 
     @Override
@@ -42,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -65,6 +69,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mBookmakrFragment.releaseTag();
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mBookmakrFragment = new BookmarkFragment();
+        mTagsFragment = new TagsFragment();
+        mTagsFragment.setOnTagTapedListener(new TagsFragment.OnTagTapedListener() {
+            @Override
+            public void onTagTaped(String tag) {
+                mBookmakrFragment.showByTag(tag);
+                mViewPager.setCurrentItem(1);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        });
     }
 
 
@@ -83,10 +115,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_change_login) {
-            Intent intent = new Intent(this, LoginAcitivty.class);
-            startActivity(intent);
-            return true;
+        switch(id) {
+            case R.id.action_change_login:
+                Intent intent = new Intent(this, LoginAcitivty.class);
+                startActivity(intent);
+                return true;
+            case android.R.id.home:
+                mBookmakrFragment.releaseTag();
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                mViewPager.setCurrentItem(0);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -109,9 +147,9 @@ public class MainActivity extends AppCompatActivity {
             // return PlaceholderFragment.newInstance(position + 1);
             switch (position) {
                 case 0:
-                    return new TagsFragment();
+                    return mTagsFragment;
                 case 1:
-                    return new BookmarkFragment();
+                    return mBookmakrFragment;
                 default:
                     Log.e(TAG, "Fragment not found");
                     return null;
