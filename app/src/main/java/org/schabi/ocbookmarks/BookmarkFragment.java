@@ -11,6 +11,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -102,6 +103,26 @@ public class BookmarkFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+
+                        switch (id) {
+                            case R.id.share:
+                                return true;
+                            case R.id.edit_menu:
+                                EditBookmarkDialog.getDialog(getActivity()).show();
+
+                                return true;
+                            case R.id.delete_menu:
+                                return true;
+                        }
+
+                        return false;
+                    }
+                });
             }
 
             @Override

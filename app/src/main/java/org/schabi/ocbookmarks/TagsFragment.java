@@ -1,6 +1,8 @@
 package org.schabi.ocbookmarks;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -11,8 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
@@ -106,6 +110,22 @@ public class TagsFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        switch (id) {
+                            case R.id.edit_menu:
+                                showEditDialog();
+                                return true;
+                            case R.id.delete_menu:
+                                return true;
+                        }
+
+                        return false;
+                    }
+                });
             }
 
             public void setTagName(String tag) {
@@ -122,9 +142,29 @@ public class TagsFragment extends Fragment {
 
             @Override
             public boolean onLongClick(View view) {
-                Log.d("asdfasdf", "aksdfjaskfdj");
                 popup.show();
                 return true;
+            }
+
+            private void showEditDialog() {
+                final EditText editText = new EditText(getActivity());
+                editText.setText(tagName);
+                AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.edit_tag)
+                        .setView(editText)
+                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                setTagName(editText.getText().toString());
+                                //todo: update owncloud edittext
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
             }
         }
     }

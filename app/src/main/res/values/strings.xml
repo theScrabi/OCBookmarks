@@ -16,4 +16,6 @@
     <string name="bookmark_url_hint">URL</string>
     <string name="bookmark_title_hint">Title</string>
     <string name="bookmark_description_hint">Description</string>
+    <string name="edit_tag">Edit tag</string>
+    <string name="cancel">Cancel</string>
 </resources>
