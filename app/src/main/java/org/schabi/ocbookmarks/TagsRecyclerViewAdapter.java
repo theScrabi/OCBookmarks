@@ -1,7 +1,6 @@
 package org.schabi.ocbookmarks;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
@@ -22,10 +21,11 @@ import java.util.ArrayList;
  * Created by the-scrabi on 25.05.17.
  */
 
-class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerViewAdapter.ViewHolder> {
+class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<String> arrayList = new ArrayList<>();
     Activity context;
     LayoutInflater inflater;
+    boolean addTagMode = false;
 
     public interface OnTagTapedListener {
         void onTagTaped(String tag);
@@ -36,7 +36,8 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerViewAdapt
         onTagTapedListener = listener;
     }
 
-    public TagsRecyclerViewAdapter(Activity acitivty) {
+    public TagsRecyclerViewAdapter(Activity acitivty, boolean addTagMode) {
+        this.addTagMode = addTagMode;
         this.context = acitivty;
         inflater = LayoutInflater.from(context);
         arrayList.add("gurken");
@@ -47,28 +48,57 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerViewAdapt
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(inflater.inflate(R.layout.tag_list_item, parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case 0:
+                return new TagHolder(inflater.inflate(R.layout.tag_list_item, parent, false));
+            case 1:
+                return new AddTagHolder(inflater.inflate(R.layout.add_tag_list_item, parent, false));
+            case 2:
+                return new FooderTagHolder(inflater.inflate(R.layout.fooder_tag_list_item, parent, false));
+            default:
+                return null;
+        }
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.setTagName(arrayList.get(position));
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(position < arrayList.size()) {
+            TagHolder tagHolder = (TagHolder) holder;
+            tagHolder.setTagName(arrayList.get(position));
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(position < arrayList.size()) {
+            return 0;
+        } else {
+            if(addTagMode) {
+                return 1;
+            } else {
+                return 2;
+            }
+        }
     }
 
     @Override
     public int getItemCount() {
-        return arrayList.size();
+        return arrayList.size() + 1;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder
+    public void addTag(String tagName) {
+        //todo: update list and upload
+    }
+
+    class TagHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener{
         private final TextView textView;
         private final PopupMenu popup;
         private final CardView cardView;
         private String tagName;
 
-        public ViewHolder(View view) {
+        public TagHolder(View view) {
             super(view);
 
             textView = (TextView) view.findViewById(R.id.tag_text);
@@ -118,8 +148,12 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerViewAdapt
 
         @Override
         public void onClick(View view) {
-            if(onTagTapedListener != null) {
-                onTagTapedListener.onTagTaped(tagName);
+            if(addTagMode) {
+                showEditDialog();
+            } else {
+                if (onTagTapedListener != null) {
+                    onTagTapedListener.onTagTaped(tagName);
+                }
             }
         }
 
@@ -148,6 +182,42 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerViewAdapt
                             dialog.dismiss();
                         }
                     }).show();
+        }
+    }
+
+    class AddTagHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        public AddTagHolder(View view) {
+            super(view);
+            CardView cardView = (CardView) view.findViewById(R.id.card_view);
+            cardView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            final EditText editText = new EditText(context);
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(R.string.edit_tag)
+                    .setView(editText)
+                    .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            addTag(editText.getText().toString());
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        }
+    }
+
+    class FooderTagHolder extends RecyclerView.ViewHolder {
+        public FooderTagHolder(View view) {
+            super(view);
         }
     }
 }

@@ -29,7 +29,7 @@ public class TagsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tags, container, false);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.tag_recycler_view);
-        TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter(getActivity());
+        TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter(getActivity(), false);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 

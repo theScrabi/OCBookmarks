@@ -1,14 +1,10 @@
 package org.schabi.ocbookmarks;
 
 
-import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,7 +57,7 @@ public class EditBookmarkDialog {
 
     private static void setupRecyclerView(View v, Activity context) {
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.tag_recycler_view);
-        TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter(context);
+        TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter(context, true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
     }
