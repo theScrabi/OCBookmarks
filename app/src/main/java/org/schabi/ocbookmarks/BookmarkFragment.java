@@ -47,7 +47,7 @@ public class BookmarkFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
     }
 
-    class BookmarksRecyclerViewAdapter extends RecyclerView.Adapter<BookmarksRecyclerViewAdapter.ViewHolder> {
+    class BookmarksRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ArrayList<String> arrayList = new ArrayList<>();
         Context context;
         LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -62,26 +62,41 @@ public class BookmarkFragment extends Fragment {
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(inflater.inflate(R.layout.bookmark_list_item, parent, false));
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            switch (viewType) {
+                case 0:
+                    return new BookmarkHolder(inflater.inflate(R.layout.bookmark_list_item, parent, false));
+                case 1:
+                    return new FooderViewHolder(inflater.inflate(R.layout.bookmark_list_item_fooder, parent, false));
+                default:
+                    return null;
+            }
         }
 
         @Override
-        public void onBindViewHolder(BookmarksRecyclerViewAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if(position < arrayList.size()) {
+                return 0;
+            } else {
+                return 1;
+            }
         }
 
         @Override
         public int getItemCount() {
-            return arrayList.size();
+            return arrayList.size() + 1;
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder
+        public class BookmarkHolder extends RecyclerView.ViewHolder
                 implements View.OnClickListener, View.OnLongClickListener {
-
 
             final PopupMenu popup;
 
-            public ViewHolder(View view) {
+            public BookmarkHolder(View view) {
                 super(view);
                 view.setOnClickListener(this);
                 view.setOnLongClickListener(this);
@@ -134,6 +149,12 @@ public class BookmarkFragment extends Fragment {
             public boolean onLongClick(View view) {
                 popup.show();
                 return true;
+            }
+        }
+
+        class FooderViewHolder extends RecyclerView.ViewHolder {
+            FooderViewHolder(View view) {
+                super(view);
             }
         }
     }
