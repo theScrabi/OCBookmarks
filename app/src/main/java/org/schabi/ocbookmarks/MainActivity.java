@@ -97,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
         });
+
+        // start login activity:
+        Intent intent = new Intent(this, LoginAcitivty.class);
+        startActivity(intent);
     }
 
 

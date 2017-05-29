@@ -14,14 +14,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <ImageView
                 android:id="@+id/starImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 app:srcCompat="@drawable/star"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
 
 
             <android.support.design.widget.TextInputLayout
