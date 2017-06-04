@@ -19,4 +19,9 @@
     <string name="edit_tag">Edit tag</string>
     <string name="cancel">Cancel</string>
     <string name="add_tags">Add tags</string>
+    <string name="sure_to_delete_tag">Are you shure to delete this tag?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="could_not_update_tag">Could not update tag.</string>
+    <string name="could_not_delete_tag">Could not delete tag.</string>
 </resources>

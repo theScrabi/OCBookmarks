@@ -30,10 +30,25 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public interface OnTagTapedListener {
         void onTagTaped(String tag);
     }
-
-    private TagsFragment.OnTagTapedListener onTagTapedListener = null;
-    public void setOnTagTapedListener(TagsFragment.OnTagTapedListener listener) {
+    private OnTagTapedListener onTagTapedListener = null;
+    public void setOnTagTapedListener(OnTagTapedListener listener) {
         onTagTapedListener = listener;
+    }
+
+    public interface OnTagEditedListener {
+        void onTagEdited(String oldTag, String newTag);
+    }
+    private OnTagEditedListener onTagEditedListener = null;
+    public void setOnTagEditedListener(OnTagEditedListener listener) {
+        onTagEditedListener = listener;
+    }
+
+    public interface OnTagDeletedListener {
+        void onTagDeleted(String tag);
+    }
+    private OnTagDeletedListener onTagDeletedListener = null;
+    public void setOnTagDeletedListener(OnTagDeletedListener listener) {
+        onTagDeletedListener = listener;
     }
 
     public TagsRecyclerViewAdapter(Activity acitivty, boolean addTagMode, ArrayList<String> tagList) {
@@ -129,6 +144,7 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             showEditDialog();
                             return true;
                         case R.id.delete_menu:
+                            showDeleteDialog();
                             return true;
                     }
 
@@ -159,6 +175,25 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return true;
         }
 
+        private void showDeleteDialog() {
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(R.string.sure_to_delete_tag)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(onTagDeletedListener != null) {
+                                onTagDeletedListener.onTagDeleted(tagName);
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        }
+
         private void showEditDialog() {
             final EditText editText = new EditText(context);
             editText.setText(tagName);
@@ -168,8 +203,10 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            if(onTagEditedListener != null) {
+                                onTagEditedListener.onTagEdited(tagName, editText.getText().toString());
+                            }
                             setTagName(editText.getText().toString());
-                            //todo: update owncloud edittext
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

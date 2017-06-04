@@ -51,6 +51,15 @@ public class BookmarkFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(onRequestReloadListener != null) {
+                    onRequestReloadListener.requestReload();
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -66,7 +75,7 @@ public class BookmarkFragment extends Fragment {
         refreshLayout.setRefreshing(false);
     }
 
-    public void setRefresh(boolean refresh) {
+    public void setRefreshing(boolean refresh) {
         refreshLayout.setRefreshing(refresh);
     }
 

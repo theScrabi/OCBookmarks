@@ -1,6 +1,7 @@
 package org.schabi.ocbookmarks;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.schabi.ocbookmarks.REST.OCBookmarksRestConnector;
 
 import java.util.ArrayList;
 
@@ -30,6 +33,16 @@ public class TagsFragment extends Fragment {
         onTagTapedListener = listener;
     }
 
+    private TagsRecyclerViewAdapter.OnTagDeletedListener onTagDeletedListener = null;
+    public void setOnTagDeletedListener(TagsRecyclerViewAdapter.OnTagDeletedListener listener) {
+        onTagDeletedListener = listener;
+    }
+
+    private TagsRecyclerViewAdapter.OnTagEditedListener onTagEditedListener = null;
+    public void setOnTagEditedListener(TagsRecyclerViewAdapter.OnTagEditedListener listener) {
+        onTagEditedListener = listener;
+    }
+
     public interface OnRequestReloadListener {
         void requestReload();
     }
@@ -49,10 +62,36 @@ public class TagsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        adapter.setOnTagTapedListener(new OnTagTapedListener() {
+        adapter.setOnTagTapedListener(new TagsRecyclerViewAdapter.OnTagTapedListener() {
             @Override
             public void onTagTaped(String tag) {
                 onTagTapedListener.onTagTaped(tag);
+            }
+        });
+        adapter.setOnTagDeletedListener(new TagsRecyclerViewAdapter.OnTagDeletedListener() {
+            @Override
+            public void onTagDeleted(String tag) {
+                if(onTagDeletedListener != null) {
+                    onTagDeletedListener.onTagDeleted(tag);
+                }
+            }
+        });
+        adapter.setOnTagEditedListener(new TagsRecyclerViewAdapter.OnTagEditedListener() {
+            @Override
+            public void onTagEdited(String oldTag, String newTag) {
+                if(onTagEditedListener != null) {
+
+                    onTagEditedListener.onTagEdited(oldTag, newTag);
+                }
+            }
+        });
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(onRequestReloadListener != null) {
+                    onRequestReloadListener.requestReload();
+                }
             }
         });
 
@@ -72,5 +111,6 @@ public class TagsFragment extends Fragment {
     public void setRefreshing(boolean refresh) {
         refreshLayout.setRefreshing(refresh);
     }
+
 
 }

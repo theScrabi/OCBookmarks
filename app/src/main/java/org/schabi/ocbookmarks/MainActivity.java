@@ -3,6 +3,7 @@ package org.schabi.ocbookmarks;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v4.media.VolumeProviderCompat;
 import android.support.v7.app.AlertDialog;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import org.schabi.ocbookmarks.REST.Bookmark;
 import org.schabi.ocbookmarks.REST.OCBookmarksRestConnector;
@@ -103,7 +105,22 @@ public class MainActivity extends AppCompatActivity {
         mainProgressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
 
         mBookmakrFragment = new BookmarkFragment();
+        setupBookmarkFragmentListener();
         mTagsFragment = new TagsFragment();
+        setupTagFragmentListener();
+    }
+
+
+    private void setupBookmarkFragmentListener() {
+        mBookmakrFragment.setOnRequestReloadListener(new BookmarkFragment.OnRequestReloadListener() {
+            @Override
+            public void requestReload() {
+                reloadData();
+            }
+        });
+    }
+
+    private void setupTagFragmentListener() {
         mTagsFragment.setOnTagTapedListener(new TagsFragment.OnTagTapedListener() {
             @Override
             public void onTagTaped(String tag) {
@@ -113,6 +130,75 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mTagsFragment.setOnRequestReloadListener(new TagsFragment.OnRequestReloadListener() {
+            @Override
+            public void requestReload() {
+                reloadData();
+            }
+        });
+
+        mTagsFragment.setOnTagEditedListener(new TagsRecyclerViewAdapter.OnTagEditedListener() {
+            @Override
+            public void onTagEdited(final String oldTag, final String newTag) {
+                setRefreshing(true);
+                AsyncTask<Void, Void, String> updateTask = new AsyncTask<Void, Void, String>() {
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        OCBookmarksRestConnector connector =
+                                new OCBookmarksRestConnector(
+                                        loginData.url,
+                                        loginData.user,
+                                        loginData.password);
+                        try {
+                            connector.renameTag(oldTag, newTag);
+                        } catch (Exception e) {
+                            return getString(R.string.could_not_update_tag);
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String result) {
+                        if(result != null) {
+                            Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
+                        }
+                        reloadData();
+                    }
+                };
+                updateTask.execute();
+            }
+        });
+
+        mTagsFragment.setOnTagDeletedListener(new TagsRecyclerViewAdapter.OnTagDeletedListener() {
+            @Override
+            public void onTagDeleted(final String tag) {
+                setRefreshing(true);
+                AsyncTask<Void, Void, String> updateTask = new AsyncTask<Void, Void, String>() {
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        OCBookmarksRestConnector connector = new OCBookmarksRestConnector(
+                                loginData.url,
+                                loginData.user,
+                                loginData.password);
+                        try {
+                            connector.deleteTag(tag);
+                        } catch (Exception e) {
+                            return getString(R.string.could_not_delete_tag);
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String result) {
+                        if(result != null) {
+                            Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG);
+                        }
+                        reloadData();
+                    }
+                };
+                updateTask.execute();
+            }
+        });
     }
 
     @Override
@@ -130,8 +216,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginAcitivty.class);
             startActivity(intent);
         } else {
-            RealodDataTask realodDataTask = new RealodDataTask();
-            realodDataTask.execute(loginData);
+            reloadData();
         }
     }
 
@@ -210,9 +295,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class RealodDataTask extends AsyncTask<LoginData, Void, Bookmark[]> {
-        protected Bookmark[] doInBackground(LoginData... loginDatas) {
-            LoginData loginData = loginDatas[0];
+    private void reloadData() {
+        RelodDataTask relodDataTask = new RelodDataTask();
+        relodDataTask.execute();
+    }
+
+    private void setRefreshing(boolean refresh) {
+        mBookmakrFragment.setRefreshing(refresh);
+        mTagsFragment.setRefreshing(refresh);
+    }
+
+    private class RelodDataTask extends AsyncTask<Void, Void, Bookmark[]> {
+        protected Bookmark[] doInBackground(Void... data) {
             try {
                 OCBookmarksRestConnector connector =
                         new OCBookmarksRestConnector(loginData.url, loginData.user, loginData.password);
@@ -230,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
                 mainProgressBar.setVisibility(View.GONE);
                 mTagsFragment.updateData(Bookmark.getTagsFromBookmarks(bookmarks));
                 mBookmakrFragment.updateData(bookmarks);
+                setRefreshing(false);
             }
         }
     }
