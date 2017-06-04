@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.schabi.ocbookmarks.REST.Bookmark;
 
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 
 public class BookmarkFragment extends Fragment {
 
+    private ArrayList<Bookmark> bookmarkList = new ArrayList<>();
     private BookmarksRecyclerViewAdapter mAdapter;
     private SwipeRefreshLayout refreshLayout;
 
@@ -72,7 +74,11 @@ public class BookmarkFragment extends Fragment {
     }
 
     public void updateData(Bookmark[] bookmarks) {
-        refreshLayout.setRefreshing(false);
+        bookmarkList.clear();
+        for(Bookmark b : bookmarks) {
+            bookmarkList.add(b);
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     public void setRefreshing(boolean refresh) {
@@ -80,17 +86,11 @@ public class BookmarkFragment extends Fragment {
     }
 
     class BookmarksRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        ArrayList<String> arrayList = new ArrayList<>();
         Context context;
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         public BookmarksRecyclerViewAdapter(Context context) {
             this.context = context;
-            arrayList.add("gurken");
-            arrayList.add("git");
-            arrayList.add("home");
-            arrayList.add("my");
-            arrayList.add("schabi");
         }
 
         @Override
@@ -107,11 +107,21 @@ public class BookmarkFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if(holder instanceof BookmarkHolder) {
+                BookmarkHolder bookmarkHolder = (BookmarkHolder) holder;
+                Bookmark b = bookmarkList.get(position);
+                bookmarkHolder.titleView.setText(b.getTitle());
+                if(!b.getDescription().isEmpty()) {
+                    bookmarkHolder.urlDescriptionView.setText(b.getDescription());
+                } else {
+                    bookmarkHolder.urlDescriptionView.setText(b.getUrl());
+                }
+            }
         }
 
         @Override
         public int getItemViewType(int position) {
-            if(position < arrayList.size()) {
+            if(position < bookmarkList.size()) {
                 return 0;
             } else {
                 return 1;
@@ -120,18 +130,22 @@ public class BookmarkFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return arrayList.size() + 1;
+            return bookmarkList.size() + 1;
         }
 
         public class BookmarkHolder extends RecyclerView.ViewHolder
                 implements View.OnClickListener, View.OnLongClickListener {
 
             final PopupMenu popup;
+            final TextView titleView;
+            final TextView urlDescriptionView;
 
             public BookmarkHolder(View view) {
                 super(view);
                 view.setOnClickListener(this);
                 view.setOnLongClickListener(this);
+                titleView = (TextView) view.findViewById(R.id.bookmark_title);
+                urlDescriptionView = (TextView) view.findViewById(R.id.bookmark_url_description);
 
                 popup = new PopupMenu(getActivity(), view);
                 MenuInflater inflater = popup.getMenuInflater();
