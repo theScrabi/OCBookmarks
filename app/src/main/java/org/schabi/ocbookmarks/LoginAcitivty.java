@@ -1,6 +1,9 @@
 package org.schabi.ocbookmarks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +30,8 @@ public class LoginAcitivty extends AppCompatActivity {
     ProgressBar progressBar;
     TextView errorView;
 
+    SharedPreferences sharedPrefs;
+
     TestLoginTask testLoginTask;
 
     @Override
@@ -45,6 +50,11 @@ public class LoginAcitivty extends AppCompatActivity {
 
         errorView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
+
+        sharedPrefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        urlInput.setText(sharedPrefs.getString(getString(R.string.login_url), ""));
+        userInput.setText(sharedPrefs.getString(getString(R.string.login_user), ""));
+        passwordInput.setText(sharedPrefs.getString(getString(R.string.login_pwd), ""));
 
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +79,14 @@ public class LoginAcitivty extends AppCompatActivity {
         return rawUrl;
     }
 
+    private void storeLogin(LoginData loginData) {
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString(getString(R.string.login_url), loginData.url);
+        editor.putString(getString(R.string.login_user), loginData.user);
+        editor.putString(getString(R.string.login_pwd), loginData.password);
+        editor.apply();
+    }
+
     private class TestLoginTask extends AsyncTask<LoginData, Void, Integer> {
         protected Integer doInBackground(LoginData... loginDatas) {
             LoginData loginData = loginDatas[0];
@@ -85,14 +103,14 @@ public class LoginAcitivty extends AppCompatActivity {
                 return new Integer(FAIL);
             }
         }
-        protected void onProgressUpdate(Void... nix) {
 
-        }
         protected void onPostExecute(Integer result) {
+            connectButton.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
             switch (result.intValue()) {
                 case OK:
-                    progressBar.setVisibility(View.GONE);
-                    connectButton.setVisibility(View.VISIBLE);
+                    storeLogin(loginData);
+                    finish();
                     break;
                 case FAIL:
                     errorView.setVisibility(View.VISIBLE);

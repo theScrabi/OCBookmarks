@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_url">login_url</string>
+    <string name="login_user">login_user</string>
+    <string name="login_pwd">login_password</string>
+</resources>

@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.schabi.ocbookmarks.REST.Bookmark;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -25,6 +27,15 @@ import java.util.ArrayList;
 public class BookmarkFragment extends Fragment {
 
     BookmarksRecyclerViewAdapter mAdapter;
+
+
+    public interface OnRequestReloadListener {
+        void requestReload();
+    }
+    private OnRequestReloadListener onRequestReloadListener = null;
+    public void setOnRequestReloadListener(OnRequestReloadListener listener) {
+        onRequestReloadListener = listener;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +56,10 @@ public class BookmarkFragment extends Fragment {
 
     public void releaseTag() {
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void updateData(Bookmark[] bookmarks) {
+
     }
 
     class BookmarksRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

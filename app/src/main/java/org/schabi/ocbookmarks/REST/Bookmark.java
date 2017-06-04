@@ -1,6 +1,7 @@
 package org.schabi.ocbookmarks.REST;
 
 import java.util.Date;
+import java.util.Vector;
 
 /**
  * Created by the-scrabi on 14.05.17.
@@ -132,5 +133,23 @@ public class Bookmark {
                 "clickount:" + clickcount + "\n" +
                 "tags:" + tagsString + "\n" +
                 "isPublic:" + Boolean.toString(isPublic);
+    }
+
+
+    public static String[] getTagsFromBookmarks(Bookmark[] bookmarks) {
+        Vector<String> tagList = new Vector<>();
+        for(Bookmark b : bookmarks) {
+            for(String tag : b.getTags()) {
+                if(!tagList.contains(tag)) {
+                    tagList.add(tag);
+                }
+            }
+        }
+
+        String[] returnTagList = new String[tagList.size()];
+        for(int i = 0; i < returnTagList.length; i++) {
+            returnTagList[i] = tagList.get(i);
+        }
+        return returnTagList;
     }
 }

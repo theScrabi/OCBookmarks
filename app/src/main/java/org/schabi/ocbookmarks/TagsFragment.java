@@ -8,6 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.schabi.ocbookmarks.REST.Bookmark;
+
 /**
  * Created by the-scrabi on 15.05.17.
  */
@@ -18,10 +21,17 @@ public class TagsFragment extends Fragment {
     public interface OnTagTapedListener {
         void onTagTaped(String tag);
     }
-
     private OnTagTapedListener onTagTapedListener = null;
     public void setOnTagTapedListener(OnTagTapedListener listener) {
         onTagTapedListener = listener;
+    }
+
+    public interface OnRequestReloadListener {
+        void requestReload();
+    }
+    private OnRequestReloadListener onRequestReloadListener = null;
+    public void setOnRequestReloadListener(OnRequestReloadListener listener) {
+        onRequestReloadListener = listener;
     }
 
     @Override
@@ -43,5 +53,8 @@ public class TagsFragment extends Fragment {
         return rootView;
     }
 
+    public void updateData(String[] tags) {
+
+    }
 
 }

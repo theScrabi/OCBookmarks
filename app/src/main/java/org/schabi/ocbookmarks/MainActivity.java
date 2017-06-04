@@ -1,5 +1,8 @@
 package org.schabi.ocbookmarks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +19,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import org.schabi.ocbookmarks.REST.Bookmark;
+import org.schabi.ocbookmarks.REST.OCBookmarksRestConnector;
+
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -98,9 +106,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // start login activity:
-        Intent intent = new Intent(this, LoginAcitivty.class);
-        startActivity(intent);
+        // start login activity when nececary:
+        SharedPreferences sharedPreferences =
+                getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        if(sharedPreferences.getString(getString(R.string.login_url), "").isEmpty()) {
+            Intent intent = new Intent(this, LoginAcitivty.class);
+            startActivity(intent);
+        }
     }
 
 
@@ -175,6 +187,29 @@ public class MainActivity extends AppCompatActivity {
                     return getString(R.string.bookmarks);
             }
             return null;
+        }
+    }
+
+    private class RealodDataTask extends AsyncTask<LoginData, Void, Bookmark[]> {
+        protected Bookmark[] doInBackground(LoginData... loginDatas) {
+            LoginData loginData = loginDatas[0];
+            try {
+                OCBookmarksRestConnector connector =
+                        new OCBookmarksRestConnector(loginData.url, loginData.user, loginData.password);
+                return connector.getBookmarks();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Bookmark[] bookmarks) {
+            if(bookmarks == null) {
+                //todo: handle error
+            } else {
+                mTagsFragment.updateData(Bookmark.getTagsFromBookmarks(bookmarks));
+                mBookmakrFragment.updateData(bookmarks);
+            }
         }
     }
 }
