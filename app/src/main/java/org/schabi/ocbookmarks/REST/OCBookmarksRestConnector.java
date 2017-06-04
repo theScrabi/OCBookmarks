@@ -23,7 +23,7 @@ public class OCBookmarksRestConnector {
     private String usr;
     private String pwd;
 
-    OCBookmarksRestConnector(String owncloudRootUrl, String user, String password) {
+    public OCBookmarksRestConnector(String owncloudRootUrl, String user, String password) {
         apiRootUrl = owncloudRootUrl + "/index.php/apps/bookmarks/public/rest/v2";
         usr = user;
         pwd = password;
