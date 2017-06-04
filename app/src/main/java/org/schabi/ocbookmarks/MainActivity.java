@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import org.schabi.ocbookmarks.REST.Bookmark;
 import org.schabi.ocbookmarks.REST.OCBookmarksRestConnector;
@@ -46,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private BookmarkFragment mBookmakrFragment;
     private TagsFragment mTagsFragment;
+    private ProgressBar mainProgressBar;
+
+    private SharedPreferences sharedPreferences;
+    private static LoginData loginData;
 
     private static final String TAG = MainActivity.class.toString();
 
@@ -95,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mainProgressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
+
         mBookmakrFragment = new BookmarkFragment();
         mTagsFragment = new TagsFragment();
         mTagsFragment.setOnTagTapedListener(new TagsFragment.OnTagTapedListener() {
@@ -106,12 +113,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //todo: only reload if no data is stored so fare
         // start login activity when nececary:
-        SharedPreferences sharedPreferences =
+        sharedPreferences =
                 getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        if(sharedPreferences.getString(getString(R.string.login_url), "").isEmpty()) {
+        loginData = new LoginData();
+        loginData.url = sharedPreferences.getString(getString(R.string.login_url), "");
+        loginData.user = sharedPreferences.getString(getString(R.string.login_user), "");
+        loginData.password = sharedPreferences.getString(getString(R.string.login_pwd), "");
+        if(loginData.url.isEmpty()) {
             Intent intent = new Intent(this, LoginAcitivty.class);
             startActivity(intent);
+        } else {
+            RealodDataTask realodDataTask = new RealodDataTask();
+            realodDataTask.execute(loginData);
         }
     }
 
@@ -207,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
             if(bookmarks == null) {
                 //todo: handle error
             } else {
+                mainProgressBar.setVisibility(View.GONE);
                 mTagsFragment.updateData(Bookmark.getTagsFromBookmarks(bookmarks));
                 mBookmakrFragment.updateData(bookmarks);
             }

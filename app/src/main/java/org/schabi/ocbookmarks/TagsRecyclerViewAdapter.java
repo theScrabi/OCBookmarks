@@ -36,15 +36,11 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         onTagTapedListener = listener;
     }
 
-    public TagsRecyclerViewAdapter(Activity acitivty, boolean addTagMode) {
+    public TagsRecyclerViewAdapter(Activity acitivty, boolean addTagMode, ArrayList<String> tagList) {
         this.addTagMode = addTagMode;
         this.context = acitivty;
         inflater = LayoutInflater.from(context);
-        arrayList.add("gurken");
-        arrayList.add("git");
-        arrayList.add("home");
-        arrayList.add("my");
-        arrayList.add("schabi");
+        arrayList = tagList;
     }
 
     @Override

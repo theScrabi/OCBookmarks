@@ -11,8 +11,11 @@ import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.app.Activity;
 
+import java.util.ArrayList;
+
 public class EditBookmarkDialog {
     public static AlertDialog getDialog(Activity context) {
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.edit_bookmark_dialog, null);
         final Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
@@ -56,8 +59,9 @@ public class EditBookmarkDialog {
     }
 
     private static void setupRecyclerView(View v, Activity context) {
+        ArrayList<String> tagList = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.tag_recycler_view);
-        TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter(context, true);
+        TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter(context, true, tagList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
     }

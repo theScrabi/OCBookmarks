@@ -51,4 +51,11 @@
         android:layout_marginBottom="14dp"
         android:layout_marginEnd="14dp" />
 
+    <ProgressBar
+        android:id="@+id/mainProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </android.support.design.widget.CoordinatorLayout>

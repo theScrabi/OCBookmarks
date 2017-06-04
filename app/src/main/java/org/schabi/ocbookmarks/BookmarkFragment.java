@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,8 +27,8 @@ import java.util.ArrayList;
 
 public class BookmarkFragment extends Fragment {
 
-    BookmarksRecyclerViewAdapter mAdapter;
-
+    private BookmarksRecyclerViewAdapter mAdapter;
+    private SwipeRefreshLayout refreshLayout;
 
     public interface OnRequestReloadListener {
         void requestReload();
@@ -42,7 +43,10 @@ public class BookmarkFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fagment_bookmarks, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.bookmark_recycler_view);
+        refreshLayout =
+                (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_bookmarks);
+        RecyclerView recyclerView =
+                (RecyclerView) rootView.findViewById(R.id.bookmark_recycler_view);
         mAdapter = new BookmarksRecyclerViewAdapter(getActivity());
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -59,7 +63,11 @@ public class BookmarkFragment extends Fragment {
     }
 
     public void updateData(Bookmark[] bookmarks) {
+        refreshLayout.setRefreshing(false);
+    }
 
+    public void setRefresh(boolean refresh) {
+        refreshLayout.setRefreshing(refresh);
     }
 
     class BookmarksRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

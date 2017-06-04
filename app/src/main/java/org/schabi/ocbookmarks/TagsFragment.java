@@ -3,13 +3,14 @@ package org.schabi.ocbookmarks;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.schabi.ocbookmarks.REST.Bookmark;
+import java.util.ArrayList;
 
 /**
  * Created by the-scrabi on 15.05.17.
@@ -17,6 +18,9 @@ import org.schabi.ocbookmarks.REST.Bookmark;
 
 public class TagsFragment extends Fragment {
 
+    private ArrayList<String> tagList = new ArrayList<>();
+    TagsRecyclerViewAdapter adapter;
+    private SwipeRefreshLayout refreshLayout;
 
     public interface OnTagTapedListener {
         void onTagTaped(String tag);
@@ -39,7 +43,9 @@ public class TagsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tags, container, false);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.tag_recycler_view);
-        TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter(getActivity(), false);
+        refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_tags);
+
+        adapter = new TagsRecyclerViewAdapter(getActivity(), false, tagList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
@@ -54,7 +60,17 @@ public class TagsFragment extends Fragment {
     }
 
     public void updateData(String[] tags) {
+        refreshLayout.setRefreshing(false);
 
+        tagList.clear();
+        for(String tag : tags) {
+            tagList.add(tag);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void setRefreshing(boolean refresh) {
+        refreshLayout.setRefreshing(refresh);
     }
 
 }
