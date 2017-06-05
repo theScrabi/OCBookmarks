@@ -33,6 +33,7 @@ import java.util.ArrayList;
 public class BookmarkFragment extends Fragment {
 
     private ArrayList<Bookmark> bookmarkList = new ArrayList<>();
+    private ArrayList<Bookmark> bookmarkToShowList = new ArrayList<>();
     private BookmarksRecyclerViewAdapter mAdapter;
     private SwipeRefreshLayout refreshLayout;
 
@@ -83,17 +84,31 @@ public class BookmarkFragment extends Fragment {
     }
 
     public void showByTag(String tag) {
+        bookmarkToShowList.clear();
+        for(Bookmark b : bookmarkList) {
+            for(String bTag : b.getTags()) {
+                if(bTag.equals(tag)) {
+                    bookmarkToShowList.add(b);
+                }
+            }
+        }
         mAdapter.notifyDataSetChanged();
     }
 
     public void releaseTag() {
+        bookmarkToShowList.clear();
+        for(Bookmark b : bookmarkList) {
+            bookmarkToShowList.add(b);
+        }
         mAdapter.notifyDataSetChanged();
     }
 
     public void updateData(Bookmark[] bookmarks) {
         bookmarkList.clear();
+        bookmarkToShowList.clear();
         for(Bookmark b : bookmarks) {
             bookmarkList.add(b);
+            bookmarkToShowList.add(b);
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -127,7 +142,7 @@ public class BookmarkFragment extends Fragment {
             if(holder instanceof BookmarkHolder) {
                 BookmarkHolder bookmarkHolder = (BookmarkHolder) holder;
                 bookmarkHolder.relatedBookmarkId = position;
-                Bookmark b = bookmarkList.get(position);
+                Bookmark b = bookmarkToShowList.get(position);
                 bookmarkHolder.titleView.setText(b.getTitle());
                 if(!b.getDescription().isEmpty()) {
                     bookmarkHolder.urlDescriptionView.setText(b.getDescription());
@@ -139,7 +154,7 @@ public class BookmarkFragment extends Fragment {
 
         @Override
         public int getItemViewType(int position) {
-            if(position < bookmarkList.size()) {
+            if(position < bookmarkToShowList.size()) {
                 return 0;
             } else {
                 return 1;
@@ -148,7 +163,7 @@ public class BookmarkFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return bookmarkList.size() + 1;
+            return bookmarkToShowList.size() + 1;
         }
 
         public class BookmarkHolder extends RecyclerView.ViewHolder
@@ -188,7 +203,7 @@ public class BookmarkFragment extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
-                        Bookmark bookmark = bookmarkList.get(relatedBookmarkId);
+                        Bookmark bookmark = bookmarkToShowList.get(relatedBookmarkId);
 
                         switch (id) {
                             case R.id.share:
@@ -229,7 +244,7 @@ public class BookmarkFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 if(onBookmarkChangedListener != null) {
                                     onBookmarkDeleteListener
-                                            .deleteBookmark(bookmarkList.get(relatedBookmarkId));
+                                            .deleteBookmark(bookmarkToShowList.get(relatedBookmarkId));
                                 }
                             }
                         })
@@ -244,7 +259,7 @@ public class BookmarkFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(bookmarkList.get(relatedBookmarkId).getUrl()));
+                intent.setData(Uri.parse(bookmarkToShowList.get(relatedBookmarkId).getUrl()));
                 startActivity(intent);
             }
 

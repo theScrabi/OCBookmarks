@@ -99,8 +99,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                mBookmakrFragment.releaseTag();
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                if(position != 1) {
+                    mBookmakrFragment.releaseTag();
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
             }
 
             @Override
