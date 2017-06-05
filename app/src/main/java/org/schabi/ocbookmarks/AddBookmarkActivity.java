@@ -5,6 +5,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import org.schabi.ocbookmarks.REST.Bookmark;
+
 public class AddBookmarkActivity extends AppCompatActivity {
 
     @Override
@@ -13,7 +15,13 @@ public class AddBookmarkActivity extends AppCompatActivity {
         setContentView(R.layout.add_bookmark_activity);
         setTitle("");
 
-        AlertDialog dialog = EditBookmarkDialog.getDialog(this);
+        EditBookmarkDialog bookmarkDialog = new EditBookmarkDialog();
+        AlertDialog dialog = bookmarkDialog.getDialog(this, null, new EditBookmarkDialog.OnBookmarkChangedListener() {
+            @Override
+            public void bookmarkChanged(Bookmark bookmark) {
+
+            }
+        });
         dialog.show();
 
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {

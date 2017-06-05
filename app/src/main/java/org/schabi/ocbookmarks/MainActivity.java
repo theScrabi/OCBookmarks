@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.schabi.ocbookmarks.REST.Bookmark;
+import org.schabi.ocbookmarks.REST.Main;
 import org.schabi.ocbookmarks.REST.OCBookmarksRestConnector;
 
 import java.util.concurrent.ExecutionException;
@@ -79,7 +80,13 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog dialog = EditBookmarkDialog.getDialog(MainActivity.this);
+                EditBookmarkDialog bookmarkDialog = new EditBookmarkDialog();
+                AlertDialog dialog = bookmarkDialog.getDialog(MainActivity.this, null, new EditBookmarkDialog.OnBookmarkChangedListener() {
+                    @Override
+                    public void bookmarkChanged(Bookmark bookmark) {
+                        addEditBookmark(bookmark);
+                    }
+                });
                 dialog.show();
             }
         });
@@ -118,6 +125,80 @@ public class MainActivity extends AppCompatActivity {
                 reloadData();
             }
         });
+
+        mBookmakrFragment.setOnBookmarkChangedListener(new EditBookmarkDialog.OnBookmarkChangedListener() {
+            @Override
+            public void bookmarkChanged(Bookmark bookmark) {
+                addEditBookmark(bookmark);
+            }
+        });
+
+        mBookmakrFragment.setOnBookmarkDeleteListener(new BookmarkFragment.OnBookmarkDeleteListener() {
+            @Override
+            public void deleteBookmark(final Bookmark bookmark) {
+                AsyncTask<Void, Void, String> updateTask = new AsyncTask<Void, Void, String>() {
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        OCBookmarksRestConnector connector = new OCBookmarksRestConnector(
+                                loginData.url,
+                                loginData.user,
+                                loginData.password);
+                        try {
+                            connector.deleteBookmark(bookmark);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return getString(R.string.could_not_delete_bookmark);
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String result) {
+                        if(result != null) {
+                            Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG);
+                        }
+                        reloadData();
+                    }
+                }.execute();
+            }
+        });
+    }
+
+    private void addEditBookmark(final Bookmark bookmark) {
+        AsyncTask<Void, Void, String> updateTask = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                OCBookmarksRestConnector connector = new OCBookmarksRestConnector(
+                        loginData.url,
+                        loginData.user,
+                        loginData.password);
+                if(bookmark.getId() < 0) {
+                    // add new bookmark
+                    try {
+                        connector.addBookmark(bookmark);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return getString(R.string.could_not_add_bookmark);
+                    }
+                } else {
+                    try {
+                        connector.editBookmark(bookmark);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return getString(R.string.could_not_change_bookmark);
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            protected  void onPostExecute(String result) {
+                if(result != null) {
+                    Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
+                }
+                reloadData();
+            }
+        }.execute();
     }
 
     private void setupTagFragmentListener() {

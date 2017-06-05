@@ -1,6 +1,8 @@
 package org.schabi.ocbookmarks;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +42,19 @@ public class BookmarkFragment extends Fragment {
     private OnRequestReloadListener onRequestReloadListener = null;
     public void setOnRequestReloadListener(OnRequestReloadListener listener) {
         onRequestReloadListener = listener;
+    }
+
+    private EditBookmarkDialog.OnBookmarkChangedListener onBookmarkChangedListener = null;
+    public void setOnBookmarkChangedListener(EditBookmarkDialog.OnBookmarkChangedListener listener) {
+        onBookmarkChangedListener = listener;
+    }
+
+    public interface OnBookmarkDeleteListener {
+        void deleteBookmark(Bookmark bookmark);
+    }
+    private OnBookmarkDeleteListener onBookmarkDeleteListener = null;
+    public void setOnBookmarkDeleteListener(OnBookmarkDeleteListener listener) {
+        onBookmarkDeleteListener = listener;
     }
 
     @Override
@@ -173,21 +188,57 @@ public class BookmarkFragment extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
+                        Bookmark bookmark = bookmarkList.get(relatedBookmarkId);
 
                         switch (id) {
                             case R.id.share:
+                                Intent intent = new Intent(Intent.ACTION_SEND);
+                                intent.setType("text/plain");
+                                intent.putExtra(Intent.EXTRA_SUBJECT, bookmark.getTitle());
+                                intent.putExtra(Intent.EXTRA_TEXT, bookmark.getUrl());
+                                startActivity(intent);
                                 return true;
                             case R.id.edit_menu:
-                                EditBookmarkDialog.getDialog(getActivity()).show();
+                                EditBookmarkDialog bookmarkDialog = new EditBookmarkDialog();
+                                bookmarkDialog.getDialog(getActivity(),
+                                        bookmark,
+                                        new EditBookmarkDialog.OnBookmarkChangedListener() {
+                                            @Override
+                                            public void bookmarkChanged(Bookmark bookmark) {
+                                                onBookmarkChangedListener.bookmarkChanged(bookmark);
+                                            }
+                                        }).show();
 
                                 return true;
                             case R.id.delete_menu:
+                                showDeleteDialog();
                                 return true;
                         }
 
                         return false;
                     }
                 });
+
+            }
+
+            private void showDeleteDialog() {
+                AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.sure_to_delete_tag)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(onBookmarkChangedListener != null) {
+                                    onBookmarkDeleteListener
+                                            .deleteBookmark(bookmarkList.get(relatedBookmarkId));
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
             }
 
             @Override

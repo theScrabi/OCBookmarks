@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 
 class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    ArrayList<String> arrayList = new ArrayList<>();
+    ArrayList<String> tagList = new ArrayList<>();
     Activity context;
     LayoutInflater inflater;
     boolean addTagMode = false;
@@ -51,11 +51,11 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         onTagDeletedListener = listener;
     }
 
-    public TagsRecyclerViewAdapter(Activity acitivty, boolean addTagMode, ArrayList<String> tagList) {
+    public TagsRecyclerViewAdapter(Activity acitivty, boolean addTagMode, ArrayList<String> list) {
         this.addTagMode = addTagMode;
         this.context = acitivty;
         inflater = LayoutInflater.from(context);
-        arrayList = tagList;
+        tagList = list;
     }
 
     @Override
@@ -74,15 +74,15 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(position < arrayList.size()) {
+        if(position < tagList.size()) {
             TagHolder tagHolder = (TagHolder) holder;
-            tagHolder.setTagName(arrayList.get(position));
+            tagHolder.setTag(position, tagList.get(position));
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position < arrayList.size()) {
+        if(position < tagList.size()) {
             return 0;
         } else {
             if(addTagMode) {
@@ -95,11 +95,12 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        return arrayList.size() + 1;
+        return tagList.size() + 1;
     }
 
     public void addTag(String tagName) {
-        //todo: update list and upload
+        tagList.add(tagName);
+        notifyDataSetChanged();
     }
 
     class TagHolder extends RecyclerView.ViewHolder
@@ -108,6 +109,7 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private final PopupMenu popup;
         private final CardView cardView;
         private String tagName;
+        private int tagId;
 
         public TagHolder(View view) {
             super(view);
@@ -153,8 +155,9 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
         }
 
-        public void setTagName(String tag) {
+        public void setTag(int id, String tag) {
             tagName = tag;
+            tagId = id;
             textView.setText(tagName);
         }
 
@@ -182,6 +185,12 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if(onTagDeletedListener != null) {
+                                for(int i = 0; i < tagList.size(); i++) {
+                                    if(tagList.get(i).equals(tagName)) {
+                                        tagList.remove(i);
+                                    }
+                                }
+                                notifyDataSetChanged();
                                 onTagDeletedListener.onTagDeleted(tagName);
                             }
                         }
@@ -203,10 +212,13 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
                             if(onTagEditedListener != null) {
                                 onTagEditedListener.onTagEdited(tagName, editText.getText().toString());
                             }
-                            setTagName(editText.getText().toString());
+                            //setTagName(editText.getText().toString());
+                            tagList.set(tagId, editText.getText().toString());
+                            notifyDataSetChanged();
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
