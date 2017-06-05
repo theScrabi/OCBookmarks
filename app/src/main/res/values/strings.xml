@@ -28,4 +28,6 @@
     <string name="could_not_add_bookmark">Could not add bookmark</string>
     <string name="could_not_change_bookmark">Couold not change bookmark</string>
     <string name="could_not_delete_bookmark">Could not delete bookmark</string>
+    <string name="not_yet_logged_in">You are not yet logged in.</string>
+    <string name="bookmark_saved">Bookmark saved</string>
 </resources>

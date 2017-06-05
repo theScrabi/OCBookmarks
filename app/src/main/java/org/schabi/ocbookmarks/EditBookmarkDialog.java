@@ -20,11 +20,18 @@ import java.util.ArrayList;
 public class EditBookmarkDialog {
     ArrayList<String> tagList = new ArrayList<>();
     Bookmark bookmark;
+    String title = "";
+    String url = "";
 
     public interface OnBookmarkChangedListener {
         void bookmarkChanged(Bookmark bookmark);
     }
     private OnBookmarkChangedListener onBookmarkChangedListener;
+
+    public void newBookmark(final String title, final String url) {
+        this.title = title;
+        this.url = url;
+    }
 
     public AlertDialog getDialog(final Activity context, Bookmark b, OnBookmarkChangedListener listener) {
         onBookmarkChangedListener = listener;
@@ -35,13 +42,15 @@ public class EditBookmarkDialog {
         final EditText urlInput = (EditText) view.findViewById(R.id.urlInput);
         final EditText titleInput = (EditText) view.findViewById(R.id.titleInput);
         final EditText descriptionInput = (EditText) view.findViewById(R.id.descriptionInput);
-        String title = null;
+        String dialogTitle = null;
 
         if(b == null) {
-            title = "Add bookmark";
+            dialogTitle = "Add bookmark";
             bookmark = Bookmark.emptyInstance();
+            bookmark.setTitle(title);
+            bookmark.setUrl(url);
         } else {
-            title = "Edit bookmark";
+            dialogTitle = "Edit bookmark";
             bookmark = b;
         }
         urlInput.setText(bookmark.getUrl());
@@ -52,7 +61,7 @@ public class EditBookmarkDialog {
             tagList.add(tag);
         }
 
-        toolbar.setTitle(title);
+        toolbar.setTitle(dialogTitle);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.inflateMenu(R.menu.edit_bookmark_menu);
 

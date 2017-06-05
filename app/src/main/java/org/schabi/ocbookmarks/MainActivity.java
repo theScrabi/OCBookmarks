@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         mBookmakrFragment.setOnBookmarkDeleteListener(new BookmarkFragment.OnBookmarkDeleteListener() {
             @Override
             public void deleteBookmark(final Bookmark bookmark) {
+                setRefreshing(true);
                 AsyncTask<Void, Void, String> updateTask = new AsyncTask<Void, Void, String>() {
                     @Override
                     protected String doInBackground(Void... params) {
@@ -165,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addEditBookmark(final Bookmark bookmark) {
+        setRefreshing(true);
         AsyncTask<Void, Void, String> updateTask = new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
