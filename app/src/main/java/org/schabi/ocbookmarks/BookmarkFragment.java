@@ -1,6 +1,8 @@
 package org.schabi.ocbookmarks;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -109,6 +111,7 @@ public class BookmarkFragment extends Fragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if(holder instanceof BookmarkHolder) {
                 BookmarkHolder bookmarkHolder = (BookmarkHolder) holder;
+                bookmarkHolder.relatedBookmarkId = position;
                 Bookmark b = bookmarkList.get(position);
                 bookmarkHolder.titleView.setText(b.getTitle());
                 if(!b.getDescription().isEmpty()) {
@@ -139,6 +142,7 @@ public class BookmarkFragment extends Fragment {
             final PopupMenu popup;
             final TextView titleView;
             final TextView urlDescriptionView;
+            int relatedBookmarkId;
 
             public BookmarkHolder(View view) {
                 super(view);
@@ -188,7 +192,9 @@ public class BookmarkFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(bookmarkList.get(relatedBookmarkId).getUrl()));
+                startActivity(intent);
             }
 
             @Override
