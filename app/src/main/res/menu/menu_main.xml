@@ -4,7 +4,11 @@
     tools:context="org.schabi.ocbookmarks.MainActivity">
     <item
         android:id="@+id/action_change_login"
-        android:orderInCategory="100"
         android:title="@string/action_change_login"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reload_icons"
+        android:title="@string/reload_icons"
+        app:showAsAction="never"/>
 </menu>

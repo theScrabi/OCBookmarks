@@ -30,4 +30,5 @@
     <string name="could_not_delete_bookmark">Could not delete bookmark</string>
     <string name="not_yet_logged_in">You are not yet logged in.</string>
     <string name="bookmark_saved">Bookmark saved</string>
+    <string name="reload_icons">Reload Icons</string>
 </resources>

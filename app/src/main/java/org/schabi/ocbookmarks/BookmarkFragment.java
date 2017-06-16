@@ -14,11 +14,13 @@ import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.schabi.ocbookmarks.REST.Bookmark;
@@ -149,6 +151,8 @@ public class BookmarkFragment extends Fragment {
                 } else {
                     bookmarkHolder.urlDescriptionView.setText(b.getUrl());
                 }
+                IconHandler ih = new IconHandler(getContext());
+                ih.loadIcon(bookmarkHolder.iconView, b);
             }
         }
 
@@ -172,6 +176,7 @@ public class BookmarkFragment extends Fragment {
             final PopupMenu popup;
             final TextView titleView;
             final TextView urlDescriptionView;
+            final ImageView iconView;
             int relatedBookmarkId;
 
             public BookmarkHolder(View view) {
@@ -180,6 +185,7 @@ public class BookmarkFragment extends Fragment {
                 view.setOnLongClickListener(this);
                 titleView = (TextView) view.findViewById(R.id.bookmark_title);
                 urlDescriptionView = (TextView) view.findViewById(R.id.bookmark_url_description);
+                iconView = (ImageView) view.findViewById(R.id.site_icon);
 
                 popup = new PopupMenu(getActivity(), view);
                 MenuInflater inflater = popup.getMenuInflater();
@@ -233,7 +239,6 @@ public class BookmarkFragment extends Fragment {
                         return false;
                     }
                 });
-
             }
 
             private void showDeleteDialog() {

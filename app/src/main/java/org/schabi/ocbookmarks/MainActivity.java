@@ -326,6 +326,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, LoginAcitivty.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_reload_icons:
+                IconHandler iconHandler = new IconHandler(MainActivity.this);
+                iconHandler.deleteAll();
+                reloadData();
             case android.R.id.home:
                 mBookmakrFragment.releaseTag();
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
