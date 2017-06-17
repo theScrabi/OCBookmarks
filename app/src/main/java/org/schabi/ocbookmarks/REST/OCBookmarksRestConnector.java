@@ -118,7 +118,7 @@ public class OCBookmarksRestConnector {
 
     public Bookmark[] getBookmarks() throws RequestException {
         try {
-            JSONArray data = send("GET", "/bookmark")
+            JSONArray data = send("GET", "/bookmark?page=-1")
                     .getJSONArray("data");
 
             Bookmark[] bookmarks = new Bookmark[data.length()];
@@ -134,7 +134,7 @@ public class OCBookmarksRestConnector {
     }
 
 
-    private Bookmark getBookmarkFromJsonO(JSONObject jBookmark) throws RequestException {
+    public Bookmark getBookmarkFromJsonO(JSONObject jBookmark) throws RequestException {
 
         String[] tags;
         try {
