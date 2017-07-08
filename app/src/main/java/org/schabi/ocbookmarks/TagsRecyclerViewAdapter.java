@@ -1,6 +1,7 @@
 package org.schabi.ocbookmarks;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
@@ -10,12 +11,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.app.Activity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 /**
  * Created by the-scrabi on 25.05.17.
@@ -226,7 +230,10 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
-                    }).show();
+                    }).create();
+            dialog.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            dialog.show();
         }
     }
 
@@ -257,6 +264,9 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             dialog.dismiss();
                         }
                     }).show();
+            dialog.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            dialog.show();
         }
     }
 

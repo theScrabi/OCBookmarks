@@ -1,6 +1,8 @@
 package org.schabi.ocbookmarks;
 
 
+import android.app.Dialog;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,11 +13,14 @@ import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.app.Activity;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.schabi.ocbookmarks.REST.Bookmark;
 
 import java.util.ArrayList;
+
+import static android.os.Build.VERSION.SDK_INT;
 
 public class EditBookmarkDialog {
     ArrayList<String> tagList = new ArrayList<>();
@@ -111,7 +116,22 @@ public class EditBookmarkDialog {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
 
+        fixTitlebarColor(toolbar, context);
+
         return dialog;
+    }
+
+    private void fixTitlebarColor(Toolbar toolbar, Context context) {
+        int textColor = 0;
+        if(SDK_INT <= 23) {
+            textColor = Color.parseColor("#ffffffff");
+        } else {
+            textColor = context.getColor(R.color.editTitlebarTextColor);
+        }
+        toolbar.setTitleTextColor(textColor);
+        TextView saveItem  = (TextView) toolbar.findViewById(R.id.save_menu);
+        saveItem.setTextColor(textColor);
+
     }
 
 }
