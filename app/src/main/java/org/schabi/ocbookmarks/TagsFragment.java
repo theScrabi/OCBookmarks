@@ -99,13 +99,17 @@ public class TagsFragment extends Fragment {
     }
 
     public void updateData(String[] tags) {
-        refreshLayout.setRefreshing(false);
+        if(refreshLayout != null) {
+            refreshLayout.setRefreshing(false);
+        }
 
         tagList.clear();
         for(String tag : tags) {
             tagList.add(tag);
         }
-        adapter.notifyDataSetChanged();
+        if(adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public void setRefreshing(boolean refresh) {

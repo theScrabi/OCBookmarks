@@ -116,25 +116,35 @@ public class OCBookmarksRestConnector {
     // +   bookmarks   +
     // +++++++++++++++++
 
-    public Bookmark[] getBookmarks() throws RequestException {
+    public JSONArray getRawBookmarks() throws RequestException {
         try {
-            JSONArray data = send("GET", "/bookmark?page=-1")
+            return send("GET", "/bookmark?page=-1")
                     .getJSONArray("data");
+        } catch (JSONException e) {
+            throw new RequestException("Could not parse data", e);
+        }
+    }
 
+    public Bookmark[] getFromRawJson(JSONArray data) throws RequestException {
+        try {
             Bookmark[] bookmarks = new Bookmark[data.length()];
             for (int i = 0; i < data.length(); i++) {
                 JSONObject bookmark = data.getJSONObject(i);
                 bookmarks[i] = getBookmarkFromJsonO(bookmark);
             }
-
             return bookmarks;
         } catch (JSONException e) {
             throw new RequestException("Could not parse data", e);
         }
     }
 
+    public Bookmark[] getBookmarks() throws RequestException {
+        JSONArray data = getRawBookmarks();
+        return getFromRawJson(data);
+    }
 
-    public Bookmark getBookmarkFromJsonO(JSONObject jBookmark) throws RequestException {
+
+    private Bookmark getBookmarkFromJsonO(JSONObject jBookmark) throws RequestException {
 
         String[] tags;
         try {

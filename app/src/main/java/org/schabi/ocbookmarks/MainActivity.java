@@ -3,7 +3,6 @@ package org.schabi.ocbookmarks;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v4.media.VolumeProviderCompat;
 import android.support.v7.app.AlertDialog;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -23,11 +22,18 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.schabi.ocbookmarks.REST.Bookmark;
-import org.schabi.ocbookmarks.REST.Main;
 import org.schabi.ocbookmarks.REST.OCBookmarksRestConnector;
+import org.schabi.ocbookmarks.REST.RequestException;
 
-import java.util.concurrent.ExecutionException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.net.UnknownHostException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -302,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             reloadData();
+            loadFromFile();
         }
     }
 
@@ -395,11 +402,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class RelodDataTask extends AsyncTask<Void, Void, Bookmark[]> {
-        protected Bookmark[] doInBackground(Void... data) {
+        protected Bookmark[] doInBackground(Void... bla) {
             try {
                 OCBookmarksRestConnector connector =
                         new OCBookmarksRestConnector(loginData.url, loginData.user, loginData.password);
-                return connector.getBookmarks();
+                JSONArray data = connector.getRawBookmarks();
+                storeToFile(data);
+                return connector.getFromRawJson(data);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -408,13 +417,53 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(Bookmark[] bookmarks) {
             if(bookmarks == null) {
-                //todo: handle error
+                Toast.makeText(MainActivity.this, R.string.connectino_failed, Toast.LENGTH_SHORT)
+                        .show();
             } else {
                 mainProgressBar.setVisibility(View.GONE);
                 mTagsFragment.updateData(Bookmark.getTagsFromBookmarks(bookmarks));
                 mBookmakrFragment.updateData(bookmarks);
                 setRefreshing(false);
             }
+        }
+    }
+
+    private void loadFromFile() {
+        File jsonFile = new File(getFilesDir() + "/data.json");
+        StringBuilder text = new StringBuilder();
+        if(jsonFile.exists()) {
+            mainProgressBar.setVisibility(View.GONE);
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(jsonFile));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    text.append(line);
+                    text.append("\n");
+                }
+                br.close();
+                OCBookmarksRestConnector connector =
+                        new OCBookmarksRestConnector(loginData.url,
+                                loginData.user,
+                                loginData.password);
+                Bookmark[] bookmarks = connector.getFromRawJson(new JSONArray(text.toString()));
+                mTagsFragment.updateData(Bookmark.getTagsFromBookmarks(bookmarks));
+                mBookmakrFragment.updateData(bookmarks);
+            } catch (JSONException je) {
+                je.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void storeToFile(JSONArray data) {
+        try {
+            FileOutputStream jsonFile = new FileOutputStream(getFilesDir() + "/data.json", false);
+            jsonFile.write(data.toString().getBytes());
+            jsonFile.flush();
+            jsonFile.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

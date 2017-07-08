@@ -112,7 +112,9 @@ public class BookmarkFragment extends Fragment {
             bookmarkList.add(b);
             bookmarkToShowList.add(b);
         }
-        mAdapter.notifyDataSetChanged();
+        if(mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     public void setRefreshing(boolean refresh) {
