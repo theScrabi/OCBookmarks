@@ -150,7 +150,12 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             showEditDialog();
                             return true;
                         case R.id.delete_menu:
-                            showDeleteDialog();
+                            if(!addTagMode) {
+                                showDeleteDialog();
+                            } else {
+                                notifyDataSetChanged();
+                                onTagDeletedListener.onTagDeleted(tagName);
+                            }
                             return true;
                     }
 
@@ -217,11 +222,12 @@ class TagsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
+                            //setTagName(editText.getText().toString());
+                            // tagList.set(tagId, editText.getText().toString());
+
                             if(onTagEditedListener != null) {
                                 onTagEditedListener.onTagEdited(tagName, editText.getText().toString());
                             }
-                            //setTagName(editText.getText().toString());
-                            tagList.set(tagId, editText.getText().toString());
                             notifyDataSetChanged();
                         }
                     })

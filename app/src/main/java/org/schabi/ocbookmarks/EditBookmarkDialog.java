@@ -1,7 +1,5 @@
 package org.schabi.ocbookmarks;
 
-
-import android.app.Dialog;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
@@ -112,7 +110,23 @@ public class EditBookmarkDialog {
 
         // setup recycler view
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tag_recycler_view);
-        TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter(context, true, tagList);
+        final TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter(context, true, tagList);
+        adapter.setOnTagDeletedListener(new TagsRecyclerViewAdapter.OnTagDeletedListener() {
+            @Override
+            public void onTagDeleted(String tag) {
+                tagList.remove(tag);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.setOnTagEditedListener(new TagsRecyclerViewAdapter.OnTagEditedListener() {
+            @Override
+            public void onTagEdited(String oldTag, String newTag) {
+                if(newTag.isEmpty()) {
+                    tagList.remove(oldTag);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
 
