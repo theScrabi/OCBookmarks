@@ -24,16 +24,13 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.schabi.ocbookmarks.REST.Bookmark;
 import org.schabi.ocbookmarks.REST.OCBookmarksRestConnector;
-import org.schabi.ocbookmarks.REST.RequestException;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.net.UnknownHostException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -54,8 +51,11 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
     private Toolbar mToolbar;
-    private BookmarkFragment mBookmakrFragment;
-    private TagsFragment mTagsFragment;
+
+    private static final String BOOKMARK_FRAGMENT = "bookmark_fragment";
+    private BookmarkFragment mBookmarkFragment = null;
+    private static final String TAGS_FRAGMENT = "tags_fragment";
+    private TagsFragment mTagsFragment = null;
     private ProgressBar mainProgressBar;
 
     private SharedPreferences sharedPreferences;
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 if(position != 1) {
-                    mBookmakrFragment.releaseTag();
+                    mBookmarkFragment.releaseTag();
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 }
             }
@@ -119,29 +120,49 @@ public class MainActivity extends AppCompatActivity {
 
         mainProgressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
 
-        mBookmakrFragment = new BookmarkFragment();
+
+        if(savedInstanceState == null) {
+            mBookmarkFragment = new BookmarkFragment();
+            setupBookmarkFragmentListener();
+            mTagsFragment = new TagsFragment();
+            setupTagFragmentListener();
+        }
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle inState) {
+        super.onRestoreInstanceState(inState);
+        FragmentManager fm = getSupportFragmentManager();
+        mBookmarkFragment = (BookmarkFragment) fm.getFragment(inState, BOOKMARK_FRAGMENT);
+        mTagsFragment = (TagsFragment) fm.getFragment(inState, TAGS_FRAGMENT);
         setupBookmarkFragmentListener();
-        mTagsFragment = new TagsFragment();
         setupTagFragmentListener();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        FragmentManager fm = getSupportFragmentManager();
+        fm.putFragment(outState, BOOKMARK_FRAGMENT, mBookmarkFragment);
+        fm.putFragment(outState, TAGS_FRAGMENT, mTagsFragment);
+    }
 
     private void setupBookmarkFragmentListener() {
-        mBookmakrFragment.setOnRequestReloadListener(new BookmarkFragment.OnRequestReloadListener() {
+        mBookmarkFragment.setOnRequestReloadListener(new BookmarkFragment.OnRequestReloadListener() {
             @Override
             public void requestReload() {
                 reloadData();
             }
         });
 
-        mBookmakrFragment.setOnBookmarkChangedListener(new EditBookmarkDialog.OnBookmarkChangedListener() {
+        mBookmarkFragment.setOnBookmarkChangedListener(new EditBookmarkDialog.OnBookmarkChangedListener() {
             @Override
             public void bookmarkChanged(Bookmark bookmark) {
                 addEditBookmark(bookmark);
             }
         });
 
-        mBookmakrFragment.setOnBookmarkDeleteListener(new BookmarkFragment.OnBookmarkDeleteListener() {
+        mBookmarkFragment.setOnBookmarkDeleteListener(new BookmarkFragment.OnBookmarkDeleteListener() {
             @Override
             public void deleteBookmark(final Bookmark bookmark) {
                 setRefreshing(true);
@@ -215,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
         mTagsFragment.setOnTagTapedListener(new TagsFragment.OnTagTapedListener() {
             @Override
             public void onTagTaped(String tag) {
-                mBookmakrFragment.showByTag(tag);
+                mBookmarkFragment.showByTag(tag);
                 mViewPager.setCurrentItem(1);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
@@ -338,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
                 iconHandler.deleteAll();
                 reloadData();
             case android.R.id.home:
-                mBookmakrFragment.releaseTag();
+                mBookmarkFragment.releaseTag();
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 mViewPager.setCurrentItem(0);
                 return true;
@@ -366,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return mTagsFragment;
                 case 1:
-                    return mBookmakrFragment;
+                    return mBookmarkFragment;
                 default:
                     Log.e(TAG, "Fragment not found");
                     return null;
@@ -397,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setRefreshing(boolean refresh) {
-        mBookmakrFragment.setRefreshing(refresh);
+        mBookmarkFragment.setRefreshing(refresh);
         mTagsFragment.setRefreshing(refresh);
     }
 
@@ -422,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 mainProgressBar.setVisibility(View.GONE);
                 mTagsFragment.updateData(Bookmark.getTagsFromBookmarks(bookmarks));
-                mBookmakrFragment.updateData(bookmarks);
+                mBookmarkFragment.updateData(bookmarks);
                 setRefreshing(false);
             }
         }
@@ -447,7 +468,7 @@ public class MainActivity extends AppCompatActivity {
                                 loginData.password);
                 Bookmark[] bookmarks = connector.getFromRawJson(new JSONArray(text.toString()));
                 mTagsFragment.updateData(Bookmark.getTagsFromBookmarks(bookmarks));
-                mBookmakrFragment.updateData(bookmarks);
+                mBookmarkFragment.updateData(bookmarks);
             } catch (JSONException je) {
                 je.printStackTrace();
             } catch (Exception e) {
