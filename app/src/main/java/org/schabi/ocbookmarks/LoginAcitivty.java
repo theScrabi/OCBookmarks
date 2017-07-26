@@ -15,6 +15,8 @@ import android.widget.TextView;
 import org.schabi.ocbookmarks.REST.OCBookmarksRestConnector;
 import org.schabi.ocbookmarks.REST.RequestException;
 
+import java.io.File;
+
 public class LoginAcitivty extends AppCompatActivity {
 
     // reply info
@@ -87,6 +89,18 @@ public class LoginAcitivty extends AppCompatActivity {
         editor.apply();
     }
 
+    private void deleteFiles() {
+        // delete files from a previous login
+        File homeDir = getApplicationContext().getFilesDir();
+        for(File file : homeDir.listFiles()) {
+            if(file.toString().contains(".png") ||
+                    file.toString().contains(".noicon") ||
+                    file.toString().contains(".json")) {
+                file.delete();
+            }
+        }
+    }
+
     private class TestLoginTask extends AsyncTask<LoginData, Void, Integer> {
         protected Integer doInBackground(LoginData... loginDatas) {
             LoginData loginData = loginDatas[0];
@@ -110,6 +124,7 @@ public class LoginAcitivty extends AppCompatActivity {
             switch (result.intValue()) {
                 case OK:
                     storeLogin(loginData);
+                    deleteFiles();
                     finish();
                     break;
                 case FAIL:
