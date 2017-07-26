@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">OCBookmarks</string>
+    <!-- owncloud/nextcloud -->
+    <string name="app_name">Nextcloud Bookmarks</string>
+    <string name="oc_bookmark_login">Nextcloud Bookmark Login</string>
+
+    <!-- persistend stuff -->
     <string name="action_change_login">Change Login</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="tags">Tags</string>
@@ -7,7 +11,6 @@
     <string name="loginUserHint">Username</string>
     <string name="loginPasswordHint">Password</string>
     <string name="loginUrlHint">Server address https://&#8230;</string>
-    <string name="oc_bookmark_login">OwnCloud Bookmark Login</string>
     <string name="connect">Connect</string>
     <string name="save">Save</string>
     <string name="edit">Edit</string>
