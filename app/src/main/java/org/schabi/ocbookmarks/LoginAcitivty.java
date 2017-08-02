@@ -114,20 +114,17 @@ public class LoginAcitivty extends AppCompatActivity {
                 connector.getBookmarks();
                 return OK;
             } catch (RequestException re) {
-                re.printStackTrace();
                 if(re.getMessage().contains("FileNotFound")) {
-                    Log.e("asdfasdf", "File not Found");
                     return FILE_NOT_FOUND;
-                } else if(re.getMessage().contains("UnknownHost")) {
-                    Log.e("asdfasdf", "UnknownHost");
+                }
+                if(re.getMessage().contains("UnknownHost")) {
                     return HOST_NOT_FOUND;
-                } else if(re.getMessage().contains("SocketTimeout")) {
-                    Log.e("asdfsadf", "timeout");
+                }
+                if(re.getMessage().contains("SocketTimeout")) {
                     return TIME_OUT;
                 }
                 return CONNECTION_FAIL;
             } catch (Exception e) {
-                e.printStackTrace();
                 return CONNECTION_FAIL;
             }
         }
@@ -135,7 +132,7 @@ public class LoginAcitivty extends AppCompatActivity {
         protected void onPostExecute(Integer result) {
             connectButton.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
-            switch (result.intValue()) {
+            switch (result) {
                 case OK:
                     storeLogin(loginData);
                     deleteFiles();
