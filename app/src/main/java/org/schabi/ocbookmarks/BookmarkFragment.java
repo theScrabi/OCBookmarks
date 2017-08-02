@@ -204,7 +204,7 @@ public class BookmarkFragment extends Fragment {
                     argTypes = new Class[]{boolean.class};
                     menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

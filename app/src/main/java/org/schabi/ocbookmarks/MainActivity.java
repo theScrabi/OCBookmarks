@@ -176,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             connector.deleteBookmark(bookmark);
                         } catch (Exception e) {
-                            e.printStackTrace();
                             return getString(R.string.could_not_delete_bookmark);
                         }
                         return null;
@@ -208,14 +207,14 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         connector.addBookmark(bookmark);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                         return getString(R.string.could_not_add_bookmark);
                     }
                 } else {
                     try {
                         connector.editBookmark(bookmark);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                         return getString(R.string.could_not_change_bookmark);
                     }
                 }
@@ -431,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
                 storeToFile(data);
                 return connector.getFromRawJson(data);
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 return null;
             }
         }
@@ -470,9 +469,9 @@ public class MainActivity extends AppCompatActivity {
                 mTagsFragment.updateData(Bookmark.getTagsFromBookmarks(bookmarks));
                 mBookmarkFragment.updateData(bookmarks);
             } catch (JSONException je) {
-                je.printStackTrace();
+                //e.printStackTrace();
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
@@ -484,7 +483,7 @@ public class MainActivity extends AppCompatActivity {
             jsonFile.flush();
             jsonFile.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 }
