@@ -23,6 +23,8 @@ public class OCBookmarksRestConnector {
     private String usr;
     private String pwd;
 
+    private static final int TIME_OUT = 10000; // in milliseconds
+
     public OCBookmarksRestConnector(String owncloudRootUrl, String user, String password) {
         apiRootUrl = owncloudRootUrl + "/index.php/apps/bookmarks/public/rest/v2";
         usr = user;
@@ -39,6 +41,7 @@ public class OCBookmarksRestConnector {
 
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(methode);
+            connection.setConnectTimeout(TIME_OUT);
             connection.addRequestProperty("Content-Type", "application/json");
             connection.addRequestProperty("Authorization", "Basic " + new String(Base64.encodeBase64((usr + ":" + pwd).getBytes())));
         } catch (Exception e) {

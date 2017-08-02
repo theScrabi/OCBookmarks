@@ -92,8 +92,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="14dp"
                 android:text="Login Failed"
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="15dp" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="@color/login_error_color"
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/connectButton"

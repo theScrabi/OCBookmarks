@@ -10,6 +10,7 @@
     <color name="loginBackground">#1e2e45</color>
     <color name="loginTextColor">#ffffff</color>
     <color name="loginTextHintColor">#999999</color>
+    <color name="login_error_color">#ff0000</color>
 
     <! edit text dialog
     <color name="editTitlebarTextColor">#ffffff</color>
@@ -25,9 +26,9 @@
     <color name="loginBackground">#0082c9</color>
     <color name="loginTextColor">#ffffff</color>
     <color name="loginTextHintColor">#84d2ff</color>
+    <color name="login_error_color">#ffffff</color>
 
     <!-- edit text dialog -->
     <color name="editTitlebarTextColor">#ffffff</color>
-
 
 </resources>

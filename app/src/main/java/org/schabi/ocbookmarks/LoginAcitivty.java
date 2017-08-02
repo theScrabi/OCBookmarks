@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +22,10 @@ public class LoginAcitivty extends AppCompatActivity {
 
     // reply info
     private static final int OK = 0;
-    private static final int FAIL = 1;
+    private static final int CONNECTION_FAIL = 1;
+    private static final int HOST_NOT_FOUND= 2;
+    private static final int FILE_NOT_FOUND = 3;
+    private static final int TIME_OUT = 4;
 
     LoginData loginData = new LoginData();
 
@@ -108,13 +112,23 @@ public class LoginAcitivty extends AppCompatActivity {
                     new OCBookmarksRestConnector(loginData.url, loginData.user, loginData.password);
             try {
                 connector.getBookmarks();
-                return new Integer(OK);
+                return OK;
             } catch (RequestException re) {
                 re.printStackTrace();
-                return new Integer(FAIL);
+                if(re.getMessage().contains("FileNotFound")) {
+                    Log.e("asdfasdf", "File not Found");
+                    return FILE_NOT_FOUND;
+                } else if(re.getMessage().contains("UnknownHost")) {
+                    Log.e("asdfasdf", "UnknownHost");
+                    return HOST_NOT_FOUND;
+                } else if(re.getMessage().contains("SocketTimeout")) {
+                    Log.e("asdfsadf", "timeout");
+                    return TIME_OUT;
+                }
+                return CONNECTION_FAIL;
             } catch (Exception e) {
                 e.printStackTrace();
-                return new Integer(FAIL);
+                return CONNECTION_FAIL;
             }
         }
 
@@ -127,7 +141,20 @@ public class LoginAcitivty extends AppCompatActivity {
                     deleteFiles();
                     finish();
                     break;
-                case FAIL:
+                case CONNECTION_FAIL:
+                    errorView.setText(getString(R.string.connection_failed_login));
+                    errorView.setVisibility(View.VISIBLE);
+                    break;
+                case HOST_NOT_FOUND:
+                    errorView.setText(getString(R.string.login_host_not_found));
+                    errorView.setVisibility(View.VISIBLE);
+                    break;
+                case FILE_NOT_FOUND:
+                    errorView.setText(getString(R.string.login_failed));
+                    errorView.setVisibility(View.VISIBLE);
+                    break;
+                case TIME_OUT:
+                    errorView.setText(getString(R.string.login_timeout));
                     errorView.setVisibility(View.VISIBLE);
                     break;
                 default:
