@@ -80,7 +80,10 @@ public class LoginAcitivty extends AppCompatActivity {
 
     private String fixUrl(String rawUrl) {
         if(!rawUrl.startsWith("http")) {
-            return "https://" + rawUrl;
+            rawUrl = "https://" + rawUrl;
+        }
+        if(rawUrl.endsWith("/")) {
+            rawUrl = rawUrl.substring(0, rawUrl.length()-2);
         }
         return rawUrl;
     }
