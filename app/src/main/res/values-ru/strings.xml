@@ -1,0 +1,51 @@
+<resources>
+    <!-- owncloud/nextcloud -->
+    <string name="app_name">Закладки Nextcloud</string>
+    <string name="oc_bookmark_login">Вход в Nextcloud Bookmark</string>
+
+    <!-- persistend stuff -->
+    <string name="action_change_login">Сменить аккаунт</string>
+    <string name="tags">Метки</string>
+    <string name="bookmarks">Закладки</string>
+    <string name="loginUserHint">Пользователь</string>
+    <string name="loginPasswordHint">Пароль</string>
+    <string name="loginUrlHint">Адрес сервера https:// ...</string>
+    <string name="connect">Подключиться</string>
+    <string name="save">Сохранить</string>
+    <string name="edit">Правка</string>
+    <string name="delete">Удалить</string>
+    <string name="share">Поделиться</string>
+    <string name="bookmark_url_hint">URL</string>
+    <string name="bookmark_title_hint">Название</string>
+    <string name="bookmark_description_hint">Описание</string>
+    <string name="edit_tag">Править метку</string>
+    <string name="cancel">Отмена</string>
+    <string name="add_tags">Добавить метки</string>
+    <string name="sure_to_delete_tag">Точно удалить эту метку?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="could_not_update_tag">Не могу обновить метку</string>
+    <string name="could_not_delete_tag">Не могу удалить метку</string>
+    <string name="no_url_entered">Не был введён URL</string>
+    <string name="could_not_add_bookmark">Не могу добавить закладку</string>
+    <string name="could_not_change_bookmark">Ошибка изменения закладки</string>
+    <string name="could_not_delete_bookmark">Ошибка удаления закладки</string>
+    <string name="not_yet_logged_in">Вы ещё не вошли.</string>
+    <string name="bookmark_saved">Закладка сохранена</string>
+    <string name="reload_icons">Загрузить значки заново</string>
+    <string name="connectino_failed">Ошибка подключения</string>
+
+    <!-- login errors -->
+    <string name="connection_failed_login">Ошибка подключения. Проверьте\n
+ • Наличие доступа в сеть\n
+ • Правильность URL</string>
+    <string name="login_host_not_found">Ошибка подключения. Проверьте правильность URL</string>
+    <string name="login_failed">Ошибка входа. Проверьте\n
+ • Правильность URL\n
+ • Имя пользователя/пароль\n
+ • На вашем Nextcloud установлено приложение Bookmarks версии 0.10.1 или выше</string>
+    <string name="login_timeout">Ошибка подключения. Проверьте\n
+ • Наличие доступа в сеть\n
+ • Правильность URL\n
+ • Номер порта</string>
+</resources>
