@@ -245,7 +245,7 @@ public class BookmarkFragment extends Fragment {
 
             private void showDeleteDialog() {
                 AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.sure_to_delete_tag)
+                        .setTitle(R.string.sure_to_delete_bookmark)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
