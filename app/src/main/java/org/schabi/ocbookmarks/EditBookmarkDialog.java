@@ -125,6 +125,14 @@ public class EditBookmarkDialog {
                     tagList.remove(oldTag);
                     adapter.notifyDataSetChanged();
                 }
+
+                if (newTag != oldTag) {
+                    int oldTagPos = tagList.indexOf(oldTag);
+                    if (oldTagPos >= 0) {
+                        tagList.set(tagList.indexOf(oldTag), newTag);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
         recyclerView.setAdapter(adapter);
