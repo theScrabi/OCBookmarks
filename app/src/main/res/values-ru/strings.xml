@@ -34,6 +34,7 @@
     <string name="bookmark_saved">Закладка сохранена</string>
     <string name="reload_icons">Загрузить значки заново</string>
     <string name="connectino_failed">Ошибка подключения</string>
+    <string name="sure_to_delete_bookmark">Удалить эту закладку?</string>
 
     <!-- login errors -->
     <string name="connection_failed_login">Ошибка подключения. Проверьте\n

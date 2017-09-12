@@ -1,0 +1,9 @@
+<resources>
+    <!-- owncloud/nextcloud -->
+    <string name="app_name">ownCloud Bookmarks</string>
+    <string name="oc_bookmark_login">ownCloud Bookmark Login</string>
+
+    <!-- login errors -->
+
+    <string name="login_failed">Login Failed. Check if\n &#x2022; The URL is correct.\n &#x2022; username/password is correct.\n &#x2022; Bookmark App v0.10.2 or\n higher is installed on your ownCloud</string>
+</resources>
