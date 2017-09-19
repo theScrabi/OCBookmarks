@@ -83,7 +83,7 @@ public class LoginAcitivty extends AppCompatActivity {
             rawUrl = "https://" + rawUrl;
         }
         if(rawUrl.endsWith("/")) {
-            rawUrl = rawUrl.substring(0, rawUrl.length()-2);
+            rawUrl = rawUrl.substring(0, rawUrl.length()-1);
         }
         return rawUrl;
     }
