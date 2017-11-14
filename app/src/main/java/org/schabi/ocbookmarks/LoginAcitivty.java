@@ -117,6 +117,10 @@ public class LoginAcitivty extends AppCompatActivity {
                 connector.getBookmarks();
                 return OK;
             } catch (RequestException re) {
+                if(BuildConfig.DEBUG) {
+                    re.printStackTrace();
+                }
+
                 if(re.getMessage().contains("FileNotFound")) {
                     return FILE_NOT_FOUND;
                 }
