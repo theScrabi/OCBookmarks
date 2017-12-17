@@ -1,0 +1,54 @@
+<resources>
+    <!-- owncloud/nextcloud -->
+    <string name="app_name">Nextcloud Bookmarks</string>
+    <string name="oc_bookmark_login">Identifiant Nextcloud Bookmark</string>
+
+    <!-- persistend stuff -->
+    <string name="action_change_login">Changer l\'Identifiant</string>
+    <string name="tags">Tags</string>
+    <string name="bookmarks">Marque-pages</string>
+    <string name="loginUserHint">Nom d\'utilisateur</string>
+    <string name="loginPasswordHint">Mot de passe</string>
+    <string name="loginUrlHint">Adresse du serveur https://&#8230;</string>
+    <string name="connect">Connexion</string>
+    <string name="save">Sauvegarder</string>
+    <string name="edit">Modifier</string>
+    <string name="delete">Supprimer</string>
+    <string name="share">Partager</string>
+    <string name="sure_to_delete_bookmark">Supprimer ce marque-page?</string>
+    <string name="bookmark_url_hint">URL</string>
+    <string name="bookmark_title_hint">Titre</string>
+    <string name="bookmark_description_hint">Description</string>
+    <string name="edit_tag">Modifier le tag</string>
+    <string name="cancel">Annuler</string>
+    <string name="add_tags">Ajouter des tags</string>
+    <string name="sure_to_delete_tag">Supprimer ce tag ?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="could_not_update_tag">Impossible d\'actualiser le tag.</string>
+    <string name="could_not_delete_tag">Impossible de supprimer le tag.</string>
+    <string name="no_url_entered">Aucune URL renseignée</string>
+    <string name="could_not_add_bookmark">Impossible d\'ajouter le marque-page</string>
+    <string name="could_not_change_bookmark">Impossible de changer le marque-page</string>
+    <string name="could_not_delete_bookmark">Impossible de supprimer le marque-page</string>
+    <string name="not_yet_logged_in">Vous n\'êtes pas encore connecté.</string>
+    <string name="bookmark_saved">Marque-page sauvegardé</string>
+    <string name="reload_icons">Recharger les Icônes</string>
+    <string name="connectino_failed">La connexion a échoué</string>
+
+    <!-- login errors -->
+    <string name="connection_failed_login">La connexion a échoué. Vérifiez\n
+       &#x2022; Votre accès à Internet\n
+       &#x2022; L\'orthographe de l\'URL\n
+       &#x2022; Les divers certificats</string>
+    <string name="login_host_not_found">La connexion a échoué. Vérifier que\n
+       &#x2022; Vous avez entré la bonne URL.</string>
+    <string name="login_failed">L\'identification a échoué. Vérifiez que\n
+       &#x2022; L\'URL est correcte.\n
+       &#x2022; Le nom d\'utilisateur/mot de passe sont corrects.\n
+       &#x2022; Bookmark App v0.10.2 ou supérieur est installé sur votre ownCloud</string>
+    <string name="login_timeout">La connexion a échoué. Vérifier que\n
+       &#x2022; Vous avez un accès Internet.\n
+       &#x2022; L\'URL est correcte.\n
+       &#x2022; Vous avez entré le bon numéro de port.</string>
+</resources>
