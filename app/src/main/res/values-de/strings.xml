@@ -1,0 +1,44 @@
+<resources>
+    <!-- owncloud/nextcloud -->
+    <string name="app_name">Nextcloud Lesezeichen</string>
+    <string name="oc_bookmark_login">Nextcloud Lesezeichen Anmeldung</string>
+
+    <!-- persistend stuff -->
+    <string name="action_change_login">Anmeldedaten ändern</string>
+    <string name="tags">Tags</string>
+    <string name="bookmarks">Lesezeichen</string>
+    <string name="loginUserHint">Nutzername</string>
+    <string name="loginPasswordHint">Passwort</string>
+    <string name="loginUrlHint">Server Adresse https://&#8230;</string>
+    <string name="connect">Verbinden</string>
+    <string name="save">Speichern</string>
+    <string name="edit">Ändern</string>
+    <string name="delete">Löschen</string>
+    <string name="share">Teilen</string>
+    <string name="sure_to_delete_bookmark">Dieses Lesezeichen löschen?</string>
+    <string name="bookmark_url_hint">URL</string>
+    <string name="bookmark_title_hint">Titel</string>
+    <string name="bookmark_description_hint">Beschreibung</string>
+    <string name="edit_tag">Tag ändern</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="add_tags">Tags hinzufügen</string>
+    <string name="sure_to_delete_tag">Diesen Tag löschen?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="could_not_update_tag">Tag konnte nicht aktualisiert werden.</string>
+    <string name="could_not_delete_tag">Tag konnte nicht gelöscht werden.</string>
+    <string name="no_url_entered">Keine URL eingegeben</string>
+    <string name="could_not_add_bookmark">Lesezeichen konnte nicht hinzugefügt werden</string>
+    <string name="could_not_change_bookmark">Lesezeichen konnte nicht geändert werden</string>
+    <string name="could_not_delete_bookmark">Lesezeichen konnte nicht gelöscht werden</string>
+    <string name="not_yet_logged_in">Sie sind noch nicht angemeldet.</string>
+    <string name="bookmark_saved">Lesezeichen gespeichert</string>
+    <string name="reload_icons">Icons aktualisieren</string>
+    <string name="connectino_failed">Verbindung fehlgeschlagen</string>
+
+    <!-- login errors -->
+    <string name="connection_failed_login">Verbindung fehlgeschlagen. Prüfen Sie ob\n &#x2022; eine Internetverbindung besteht.\n &#x2022; die URL korrekt ist.\n &#x2022; Sie das selbstsignierte Zertifikat importiert haben.</string>
+    <string name="login_host_not_found">Verbindung fehlgeschlagen. Prüfen Sie ob\n &#x2022; Sie die richtige URL eingegeben haben.</string>
+    <string name="login_failed">Anmeldung fehlgeschlagen. Prüfen Sie ob\n &#x2022; die URL korrekt ist.\n &#x2022; Nutzername und Passwort korrekt sind.\n &#x2022; die Bookmark App v0.10.1 oder neuer auf Ihrer Nextcloud installiert ist.</string>
+    <string name="login_timeout">Verbindung fehlgeschlagen. Prüfen Sie ob\n &#x2022; eine Internetverbindung besteht.\n &#x2022; die URL korrekt ist.\n &#x2022; Sie den korrekten Port eingegeben haben.</string>
+</resources>
