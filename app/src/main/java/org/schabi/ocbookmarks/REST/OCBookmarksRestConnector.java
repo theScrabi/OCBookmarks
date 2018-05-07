@@ -77,7 +77,7 @@ public class OCBookmarksRestConnector {
     private JSONObject parseJson(String methode, String url, String response) throws RequestException {
 
         JSONObject data = null;
-        if(methode == "GET" && url.endsWith("/tag")) {
+        if(methode.equals("GET") && url.endsWith("/tag")) {
             // we have to handle GET /tag different:
             // https://github.com/nextcloud/bookmarks#list-all-tags
             JSONArray array = null;

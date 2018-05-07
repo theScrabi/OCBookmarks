@@ -207,14 +207,14 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         connector.addBookmark(bookmark);
                     } catch (Exception e) {
-                        //e.printStackTrace();
+                        if(BuildConfig.DEBUG) e.printStackTrace();
                         return getString(R.string.could_not_add_bookmark);
                     }
                 } else {
                     try {
                         connector.editBookmark(bookmark);
                     } catch (Exception e) {
-                        //e.printStackTrace();
+                        if(BuildConfig.DEBUG) e.printStackTrace();
                         return getString(R.string.could_not_change_bookmark);
                     }
                 }
@@ -430,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
                 storeToFile(data);
                 return connector.getFromRawJson(data);
             } catch (Exception e) {
-                //e.printStackTrace();
+                if(BuildConfig.DEBUG) e.printStackTrace();
                 return null;
             }
         }
@@ -469,9 +469,9 @@ public class MainActivity extends AppCompatActivity {
                 mTagsFragment.updateData(Bookmark.getTagsFromBookmarks(bookmarks));
                 mBookmarkFragment.updateData(bookmarks);
             } catch (JSONException je) {
-                //e.printStackTrace();
+                if(BuildConfig.DEBUG) je.printStackTrace();
             } catch (Exception e) {
-                //e.printStackTrace();
+                if(BuildConfig.DEBUG) e.printStackTrace();
             }
         }
     }
@@ -483,7 +483,7 @@ public class MainActivity extends AppCompatActivity {
             jsonFile.flush();
             jsonFile.close();
         } catch (Exception e) {
-            //e.printStackTrace();
+            if(BuildConfig.DEBUG) e.printStackTrace();
         }
     }
 }

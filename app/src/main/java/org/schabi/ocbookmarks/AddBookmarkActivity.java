@@ -54,7 +54,7 @@ public class AddBookmarkActivity extends AppCompatActivity {
                         try {
                             connector.addBookmark(bookmark);
                         } catch (Exception e) {
-                            //e.printStackTrace();
+                            if(BuildConfig.DEBUG) e.printStackTrace();
                             return getString(R.string.could_not_add_bookmark);
                         }
                         return null;

@@ -94,7 +94,7 @@ public class IconHandler {
 
                     return null;
                 } catch (Exception e) {
-                    //e.printStackTrace();
+                    if(BuildConfig.DEBUG) e.printStackTrace();
                     return null;
                 } finally {
                     try {
@@ -102,7 +102,7 @@ public class IconHandler {
                             in.close();
                         }
                     } catch (Exception e) {
-                        //e.printStackTrace();
+                        if(BuildConfig.DEBUG) e.printStackTrace();
                     }
                 }
             }
@@ -145,7 +145,7 @@ public class IconHandler {
         try {
             iconFile.createNewFile();
         } catch (Exception e) {
-            //e.printStackTrace();
+            if(BuildConfig.DEBUG) e.printStackTrace();
         }
     }
 
@@ -158,7 +158,7 @@ public class IconHandler {
             out = new FileOutputStream(iconFile.toString());
             icon.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
-            //e.printStackTrace();
+            if(BuildConfig.DEBUG) e.printStackTrace();
         }
     }
 
